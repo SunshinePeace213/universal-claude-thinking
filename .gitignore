@@ -66,6 +66,7 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
+.nyc_output/
 
 # Build outputs
 dist/
@@ -113,9 +114,17 @@ secrets/
 # Pipfile.lock
 
 # Claude Code specific
-# .claude/
+.claude/settings.local.json
+.claude/cache/
+.claude/logs/
 
 # Project specific exclusions
 .bmad-core/
 .bmad-creator-tools/
 .bmad-infrastructure-devops/
+
+# Testing
+test-results/
+
+# Keep .env.example
+!.env.example

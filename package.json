@@ -1,0 +1,37 @@
+{
+  "name": "universal-claude-thinking",
+  "version": "1.0.0",
+  "description": "A modular thinking system for Claude Code that provides structured cognitive tools and reusable thinking modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "echo \"Linting not configured yet\"",
+    "format": "echo \"Formatting not configured yet\"",
+    "validate": "npm run lint && npm run test",
+    "clean": "rm -rf node_modules dist coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/universal-claude-thinking.git"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "thinking-modules",
+    "cognitive-tools",
+    "ai",
+    "reasoning"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/universal-claude-thinking/issues"
+  },
+  "homepage": "https://github.com/yourusername/universal-claude-thinking#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  }
+}
