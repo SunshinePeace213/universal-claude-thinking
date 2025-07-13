@@ -10,18 +10,21 @@
 ## Key Metrics
 
 **Module Metrics:**
+
 - Module activation rate by category
 - Token usage per module per request
 - Module load time percentiles
 - Dependency resolution time
 
 **Protocol Metrics:**
+
 - SAGE bias detection frequency
 - SEIQF average quality scores
 - SIA intent classification accuracy
 - Protocol state size over time
 
 **System Metrics:**
+
 - Total context reduction percentage
 - Average response generation time
 - MCP tool invocation patterns

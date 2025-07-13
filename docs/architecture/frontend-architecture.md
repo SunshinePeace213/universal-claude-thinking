@@ -1,10 +1,11 @@
 # Frontend Architecture
 
-*Note: This system has no traditional frontend - it operates within Claude Code's context*
+_Note: This system has no traditional frontend - it operates within Claude Code's context_
 
 ## Context Interface Architecture
 
 ### Module Display Format
+
 ```text
 🎯 THINKING STATUS: Active
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -16,6 +17,7 @@
 ```
 
 ### Thinking Visibility Logs
+
 ```text
 [🔍 Research Phase]
 ├─ 🧠 Sequential thinking initiated

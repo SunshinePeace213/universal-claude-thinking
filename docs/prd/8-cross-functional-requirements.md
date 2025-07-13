@@ -11,7 +11,7 @@
 
 ## 8.2 Integration Requirements
 
-- **Clear-thought MCP Integration**: 
+- **Clear-thought MCP Integration**:
   - Authentication: Use Claude Code's existing MCP authentication mechanism
   - Data Exchange: JSON-RPC 2.0 format for all MCP tool invocations
   - Error Handling: Graceful degradation when MCP tools timeout or fail

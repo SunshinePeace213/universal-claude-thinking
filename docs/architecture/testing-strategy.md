@@ -1,10 +1,11 @@
 # Testing Strategy
 
 ## Testing Pyramid
+
 ```
          Migration Tests
         /              \
-    Integration Tests    
+    Integration Tests
    /                  \
 Module Tests    Performance Tests
 ```
@@ -12,6 +13,7 @@ Module Tests    Performance Tests
 ## Test Organization
 
 ### Module Tests
+
 ```
 tests/
 ├── unit/
@@ -27,6 +29,7 @@ tests/
 ```
 
 ### Integration Tests
+
 ```
 tests/
 └── integration/
@@ -36,6 +39,7 @@ tests/
 ```
 
 ### Performance Tests
+
 ```
 tests/
 └── performance/
@@ -47,14 +51,15 @@ tests/
 ## Test Examples
 
 ### Module Test
+
 ```typescript
 describe('SAGE Module', () => {
   it('should detect confirmation bias', async () => {
     const result = await loadAndExecute('SAGE', {
-      input: 'All swans are white because I\'ve only seen white swans',
+      input: "All swans are white because I've only seen white swans",
       state: createMockState()
     });
-    
+
     expect(result.biasLevel).toBe('medium');
     expect(result.detectedBiases).toContain('confirmation');
   });
@@ -62,6 +67,7 @@ describe('SAGE Module', () => {
 ```
 
 ### Integration Test
+
 ```typescript
 describe('Nested Tool Invocation', () => {
   it('should handle 3-level nested calls', async () => {
@@ -69,7 +75,7 @@ describe('Nested Tool Invocation', () => {
       request: 'Analyze latest ML research on transformers',
       maxDepth: 3
     });
-    
+
     expect(result.toolInvocations).toHaveLength(3);
     expect(result.recursionDepth).toBeLessThanOrEqual(3);
   });
@@ -77,11 +83,12 @@ describe('Nested Tool Invocation', () => {
 ```
 
 ### Performance Test
+
 ```typescript
 describe('Token Usage Benchmark', () => {
   it('should stay under 5K tokens for complex requests', async () => {
     const metrics = await benchmark.run('complex-analysis.yaml');
-    
+
     expect(metrics.avgTokens).toBeLessThan(5000);
     expect(metrics.p95Tokens).toBeLessThan(7000);
   });
@@ -89,29 +96,30 @@ describe('Token Usage Benchmark', () => {
 ```
 
 ### Hook Test
+
 ```typescript
 describe('Module Validation Hook', () => {
   it('should prevent modules exceeding token limit', async () => {
     const largeModule = generateLargeModule(6000); // 6000 tokens
-    
+
     const result = await hookExecutor.execute('module-validation', {
       path: '/test/large-module.md',
       content: largeModule
     });
-    
+
     expect(result.success).toBe(false);
     expect(result.error).toContain('exceeds 5000 token limit');
   });
-  
+
   it('should update merkle tree on valid module', async () => {
     const validModule = generateValidModule();
     const merkleTreeBefore = await getMerkleRoot();
-    
+
     await hookExecutor.execute('module-validation', {
       path: '/test/valid-module.md',
       content: validModule
     });
-    
+
     const merkleTreeAfter = await getMerkleRoot();
     expect(merkleTreeAfter).not.toBe(merkleTreeBefore);
   });

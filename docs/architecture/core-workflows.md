@@ -9,20 +9,20 @@ sequenceDiagram
     participant VA as Virtual Agent
     participant MCP as MCP Tools
     participant EXT as External Tools
-    
+
     U->>RC: Submit request
     RC->>RC: Analyze request type
     RC->>ML: Classification + required modules
-    
+
     loop For each module
         ML->>SV: Validate module hash
         SV->>ML: Validation result
         ML->>ML: Load via @import
     end
-    
+
     ML->>VA: Initialize agents
     VA->>VA: Share protocol state
-    
+
     par Research Phase
         VA->>MCP: Sequential thinking
         MCP->>EXT: Tavily search (nested)
@@ -34,7 +34,7 @@ sequenceDiagram
         MCP->>EXT: Context7 docs (nested)
         EXT->>MCP: Technical info
     end
-    
+
     VA->>VA: Merge results
     VA->>U: Final response
 ```

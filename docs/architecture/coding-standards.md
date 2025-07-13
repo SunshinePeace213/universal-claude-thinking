@@ -17,9 +17,9 @@
 
 ## Naming Conventions
 
-| Element | Frontend | Backend | Example |
-|---------|----------|---------|---------|
-| Modules | kebab-case | - | `sage-protocol.md` |
-| Config Files | kebab-case | - | `metadata.yaml` |
-| State Keys | camelCase | - | `protocolState` |
-| Agent IDs | kebab-case | - | `research-agent` |
+| Element      | Frontend   | Backend | Example            |
+| ------------ | ---------- | ------- | ------------------ |
+| Modules      | kebab-case | -       | `sage-protocol.md` |
+| Config Files | kebab-case | -       | `metadata.yaml`    |
+| State Keys   | camelCase  | -       | `protocolState`    |
+| Agent IDs    | kebab-case | -       | `research-agent`   |

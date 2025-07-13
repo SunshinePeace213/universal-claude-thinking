@@ -1,6 +1,7 @@
 # Error Handling
 
 When errors occur:
+
 1. Log to thinking visibility
 2. Apply fallback strategy
 3. Continue with degraded functionality
@@ -8,7 +9,8 @@ When errors occur:
 
 Example:
 ⚠️ SEIQF: Source validation timeout - using cached credibility scores
-```
+
+````
 
 ## Orchestrator Error Handling
 ```typescript
@@ -18,13 +20,13 @@ class ModuleOrchestrator {
       return await this.loader.load(moduleId);
     } catch (error) {
       this.log.warn(`Module ${moduleId} failed: ${error.message}`);
-      
+
       if (this.isEssential(moduleId)) {
         return this.loadEssentialVersion(moduleId);
       }
-      
+
       return this.createStub(moduleId);
     }
   }
 }
-```
+````

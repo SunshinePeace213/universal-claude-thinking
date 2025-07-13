@@ -1,8 +1,10 @@
 # Protocol Status
+
 - SAGE: {{sage_status}}
 - SEIQF: {{seiqf_status}}
 - SIA: {{sia_status}}
-```
+
+````
 
 ## Database Architecture
 
@@ -38,18 +40,18 @@
     "loadTime": 87
   }
 }
-```
+````
 
 ## Authentication and Authorization
 
-*Note: Relies on Claude Code's existing security model*
+_Note: Relies on Claude Code's existing security model_
 
 ```mermaid
 sequenceDiagram
     participant CC as Claude Code
     participant ML as Module Loader
     participant FS as File System
-    
+
     CC->>ML: Request module load
     ML->>ML: Calculate SHA-256
     ML->>FS: Read module + hash

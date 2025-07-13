@@ -4,10 +4,14 @@
   "description": "A modular thinking system for Claude Code that provides structured cognitive tools and reusable thinking modules",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "echo \"Linting not configured yet\"",
-    "format": "echo \"Formatting not configured yet\"",
-    "validate": "npm run lint && npm run test",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint tests/**/*.js .claude/**/*.md --fix",
+    "lint:check": "eslint tests/**/*.js .claude/**/*.md",
+    "format": "prettier --write tests/**/*.js .claude/**/*.md docs/**/*.md",
+    "format:check": "prettier --check tests/**/*.js .claude/**/*.md docs/**/*.md",
+    "validate": "npm run lint:check && npm run format:check && npm run test",
     "clean": "rm -rf node_modules dist coverage"
   },
   "repository": {
@@ -28,10 +32,23 @@
     "url": "https://github.com/yourusername/universal-claude-thinking/issues"
   },
   "homepage": "https://github.com/yourusername/universal-claude-thinking#readme",
-  "devDependencies": {},
-  "dependencies": {},
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "globals": "^16.3.0",
+    "jest": "^30.0.4",
+    "prettier": "^3.6.2"
+  },
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "type": "commonjs"
 }

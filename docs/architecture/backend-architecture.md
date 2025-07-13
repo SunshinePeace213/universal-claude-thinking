@@ -3,6 +3,7 @@
 ## Service Architecture
 
 ### Module Organization
+
 ```
 .claude/
 ├── CLAUDE.md                    # Core orchestrator (~500 tokens)
@@ -24,8 +25,10 @@
 ```
 
 ### Orchestrator Template (CLAUDE.md)
+
 ```markdown
 ---
 version: 1.0.0
 tokens: 500
 ---
+```

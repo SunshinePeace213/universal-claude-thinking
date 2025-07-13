@@ -8,7 +8,7 @@ sequenceDiagram
     participant O as Orchestrator
     participant M as Module
     participant MCP as MCP Tool
-    
+
     U->>O: Request
     O->>M: Load module
     alt Module load fails
@@ -31,6 +31,7 @@ sequenceDiagram
 ```
 
 ## Error Response Format
+
 ```typescript
 interface ThinkingError {
   error: {
@@ -45,4 +46,7 @@ interface ThinkingError {
 ```
 
 ## Module Error Handling
+
 ```markdown
+
+```

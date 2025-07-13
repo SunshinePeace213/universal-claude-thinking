@@ -1,15 +1,18 @@
 # Testing Infrastructure
 
 ## Test Framework Architecture
+
 **Responsibility:** Comprehensive testing of modules, integration, and performance
 
 **Key Components:**
+
 - Jest with custom .md transformers
 - Module fixture generator
 - Performance benchmark suite
 - Mock MCP server
 
 **Architecture Diagram:**
+
 ```mermaid
 graph TB
     subgraph "Test Infrastructure"
@@ -18,35 +21,36 @@ graph TB
         PB[Performance Benchmarks]
         MM[Mock MCP Server]
     end
-    
+
     subgraph "Test Types"
         UT[Unit Tests]
         IT[Integration Tests]
         PT[Performance Tests]
         RT[Regression Tests]
     end
-    
+
     subgraph "Test Data"
         VF[Valid Modules]
         CF[Corrupted Modules]
         EF[Edge Cases]
         BL[Baseline Metrics]
     end
-    
+
     TF --> UT
     TF --> IT
     TF --> PT
     TF --> RT
-    
+
     MF --> VF
     MF --> CF
     MF --> EF
-    
+
     PB --> BL
     MM --> IT
 ```
 
 ## Module Test Fixtures
+
 ```typescript
 interface TestFixture {
   id: string;
@@ -82,6 +86,7 @@ const fixtures = {
 ```
 
 ## Performance Baseline Architecture
+
 ```typescript
 interface PerformanceBaseline {
   monolithic: {
@@ -106,15 +111,17 @@ interface PerformanceBaseline {
 ```
 
 ## Mock MCP Server Architecture
+
 **Purpose:** Enable offline development and testing
 
 **Implementation:**
+
 ```typescript
 class MockMCPServer {
   private responses: Map<string, MockResponse>;
   private latency: SimulatedLatency;
   private circuitBreaker: CircuitBreaker;
-  
+
   constructor(config: MockConfig) {
     this.responses = this.loadMockResponses(config.responsePath);
     this.latency = new SimulatedLatency(config.latencyProfile);
@@ -124,28 +131,29 @@ class MockMCPServer {
       resetTimeout: 60000
     });
   }
-  
+
   async handleRequest(tool: string, params: any): Promise<MockResponse> {
     // Simulate network conditions
     await this.latency.simulate();
-    
+
     // Check circuit breaker
     if (this.circuitBreaker.isOpen()) {
       throw new Error('Circuit breaker open');
     }
-    
+
     // Return mock response
     const response = this.responses.get(tool);
     if (!response) {
       throw new Error(`No mock for tool: ${tool}`);
     }
-    
+
     return this.applyVariations(response, params);
   }
 }
 ```
 
 **Mock Response Structure:**
+
 ```json
 {
   "sequentialthinking": {

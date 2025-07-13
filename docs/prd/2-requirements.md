@@ -1,6 +1,7 @@
 # 2. Requirements
 
 ## Functional
+
 - FR1: The system shall dynamically load thinking modules based on request classification, reducing average context usage by 85% or more
 - FR2: The system shall integrate clear-thought MCP tools (sequential thinking, mental models, etc.) without duplicating their logic
 - FR2.1: The system shall support Universal Dynamic Information Gathering where any active thinking tool can invoke other MCP tools when information gaps are identified
@@ -17,6 +18,7 @@
 - FR12: The system shall display which thinking modules and MCP tools are active in a user-friendly format
 
 ## Non Functional
+
 - NFR1: Context window usage must not exceed 5K tokens for 90% of requests
 - NFR2: Module loading decisions must complete within 100ms to avoid perception of latency
 - NFR3: The system must support addition of new thinking modules without modifying core files

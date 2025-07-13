@@ -1,12 +1,15 @@
 # 3. Technical Assumptions
 
 ## Repository Structure: Monorepo
+
 The project will use a monorepo structure to maintain all thinking modules, cognitive tools, and configuration in a single repository for easier version control and deployment.
 
 ## Service Architecture: Modular Monolith
+
 The system will be implemented as a modular monolith within Claude Code's context system, using @import directives for dynamic module loading rather than microservices.
 
 ## Testing Requirements: Comprehensive Testing Strategy
+
 - Unit tests for individual thinking modules and classifiers
 - Integration tests for module loading and MCP integration
 - Performance tests to validate token usage reduction
@@ -18,6 +21,7 @@ The system will be implemented as a modular monolith within Claude Code's contex
 - User acceptance tests for thinking visibility and accuracy
 
 ## Additional Technical Assumptions and Requests
+
 - Claude Code's @import syntax will be used for dynamic module loading
 - Markdown format (.md) for all thinking modules to ensure compatibility
 - YAML format for configuration and routing rules
