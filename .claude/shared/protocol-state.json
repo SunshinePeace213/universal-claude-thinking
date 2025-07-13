@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-13T00:00:00Z",
+  "session": {
+    "id": "session-001",
+    "startTime": "2025-01-13T00:00:00Z",
+    "requestCount": 0
+  },
+  "loadedModules": [],
+  "tokenUsage": {
+    "total": 5000,
+    "used": 0,
+    "reserved": 0,
+    "available": 5000,
+    "lastReset": "2025-01-13T00:00:00Z"
+  },
+  "telemetry": {
+    "cacheHits": 0,
+    "cacheMisses": 0,
+    "moduleLoadFailures": 0,
+    "averageLoadTime": 0,
+    "securityValidationFailures": 0
+  },
+  "moduleMetrics": {},
+  "alerts": []
+}

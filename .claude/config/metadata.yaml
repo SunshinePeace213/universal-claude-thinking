@@ -1,0 +1,152 @@
+# Module Registry - Central metadata for all thinking modules
+# Version: 1.0.1
+# Last Updated: 2025-01-13
+# 
+# QA NOTE: Modules commented out until files exist and real SHA-256 hashes can be generated
+# This prevents security vulnerabilities from placeholder hashes
+
+modules:
+  # IMPORTANT: All modules are temporarily disabled because the module files don't exist
+  # Once the module files are created, uncomment these entries and generate real SHA-256 hashes
+  
+  # Example of a properly configured module (when files exist):
+  # module-loader:
+  #   id: "module-loader"
+  #   version: "1.0.0"
+  #   tokenCount: 500
+  #   dependencies: []
+  #   triggers: []
+  #   protocols: []
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Module loading infrastructure"
+
+  # Core Thinking Modules (DISABLED - files don't exist)
+  # SAGE:
+  #   id: "SAGE"
+  #   version: "1.0.0"
+  #   tokenCount: 2000
+  #   dependencies: []
+  #   triggers:
+  #     - "analyze"
+  #     - "think through"
+  #     - "reasoning"
+  #     - "step by step"
+  #   protocols: ["SAGE"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Structured analytical guidance and exploration protocol"
+    
+  # SEIQF:
+  #   id: "SEIQF"
+  #   version: "1.0.0"
+  #   tokenCount: 3000
+  #   dependencies: []
+  #   triggers:
+  #     - "implement"
+  #     - "build"
+  #     - "develop"
+  #     - "code"
+  #     - "refactor"
+  #   protocols: ["SEIQF"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Software engineering implementation quality framework"
+    
+  # SIA:
+  #   id: "SIA"
+  #   version: "1.0.0"
+  #   tokenCount: 2000
+  #   dependencies: []
+  #   triggers:
+  #     - "search"
+  #     - "find"
+  #     - "locate"
+  #     - "explore"
+  #     - "discover"
+  #   protocols: ["SIA"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Systematic information acquisition protocol"
+    
+  # response-formats:
+  #   id: "response-formats"
+  #   version: "1.0.0"
+  #   tokenCount: 1000
+  #   dependencies: []
+  #   triggers:
+  #     - "format"
+  #     - "structure"
+  #     - "template"
+  #   protocols: []
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Standard response formatting templates"
+    
+  # Cognitive Tools (DISABLED - files don't exist)
+  # cognitive-tools/analysis:
+  #   id: "cognitive-tools/analysis"
+  #   version: "1.0.0"
+  #   tokenCount: 500
+  #   dependencies: ["SAGE"]
+  #   triggers:
+  #     - "analyze deeply"
+  #     - "break down"
+  #     - "decompose"
+  #   protocols: ["SAGE"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Advanced analytical cognitive tools"
+    
+  # cognitive-tools/search:
+  #   id: "cognitive-tools/search"
+  #   version: "1.0.0"
+  #   tokenCount: 500
+  #   dependencies: ["SIA"]
+  #   triggers:
+  #     - "search comprehensively"
+  #     - "deep search"
+  #     - "thorough search"
+  #   protocols: ["SIA"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Enhanced search cognitive tools"
+    
+  # cognitive-tools/code-analysis:
+  #   id: "cognitive-tools/code-analysis"
+  #   version: "1.0.0"
+  #   tokenCount: 500
+  #   dependencies: ["SEIQF"]
+  #   triggers:
+  #     - "analyze code"
+  #     - "review code"
+  #     - "debug"
+  #   protocols: ["SEIQF"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Code analysis and review tools"
+    
+  # cognitive-tools/meta-reasoning:
+  #   id: "cognitive-tools/meta-reasoning"
+  #   version: "1.0.0"
+  #   tokenCount: 500
+  #   dependencies: ["SAGE"]
+  #   triggers:
+  #     - "meta"
+  #     - "reflect"
+  #     - "self-analyze"
+  #   protocols: ["SAGE"]
+  #   securityHash: "GENERATE_REAL_SHA256_HASH_HERE"
+  #   lastModified: "2025-01-13T00:00:00Z"
+  #   description: "Meta-cognitive reasoning tools"
+
+# Registry Configuration
+registry:
+  version: "1.0.1"
+  maxModules: 50
+  tokenBudget: 5000
+  cacheEnabled: true
+  cacheTTL: 3600  # 1 hour in seconds
+  validationRequired: true
+  quarantineEnabled: true
+  quarantineMaxRetries: 3

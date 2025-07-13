@@ -1,6 +1,6 @@
 ---
-version: 2.0.0
-tokens: 450
+version: 2.1.0
+tokens: 500
 ---
 
 # Claude Thinking Orchestrator
@@ -22,29 +22,79 @@ Returns RequestClassification with:
 
 Confidence threshold: 0.8
 
-## Module Loading
+## Module Loading Infrastructure
 
-Based on classification results:
+@import "./module-loader.md"
 
-### Simple Requests
-@import "./thinking-modules/response-formats.md"
+Initialize module loading system:
+1. Create ModuleLoader with security validation
+2. Setup TokenTracker with 5K budget
+3. Initialize ModuleRegistry from metadata.yaml
+4. Configure health checks and monitoring
 
-### Complex Requests
-@import "./thinking-modules/SAGE.md"
-@import "./thinking-modules/SEIQF.md"
-@import "./cognitive-tools/analysis.md"
+## Dynamic Module Loading
 
-### Search Requests
-@import "./thinking-modules/SIA.md"
-@import "./cognitive-tools/search.md"
+```typescript
+// Classify request
+const classification = await classifier.classify(userRequest);
 
-### Code Requests
-@import "./thinking-modules/SEIQF.md"
-@import "./cognitive-tools/code-analysis.md"
+// Initialize infrastructure
+const registry = new ModuleRegistry('./.claude/config/metadata.yaml');
+await registry.initialize();
 
-### Meta Requests
-@import "./thinking-modules/SAGE.md"
-@import "./cognitive-tools/meta-reasoning.md"
+const validator = new SecurityValidator();
+const tokenTracker = new TokenTracker(5000);
+const healthChecker = new ModuleHealthChecker();
+
+// Configure module loader
+const loader = new ModuleLoader({
+  basePath: './.claude',
+  tokenBudget: 5000,
+  securityValidator: validator,
+  moduleRegistry: registry
+});
+
+// Resolve dependencies and load modules
+const resolver = new DependencyResolver(registry);
+const loadOrder = await resolver.resolveDependencies(classification.requiredModules);
+
+// Load modules with health checks
+const loadedModules = [];
+for (const moduleId of loadOrder) {
+  // Reserve tokens
+  const metadata = await registry.getMetadata(moduleId);
+  if (!tokenTracker.reserveTokens(moduleId, metadata.tokenCount)) {
+    console.warn(`Token budget exceeded for ${moduleId}`);
+    continue;
+  }
+  
+  // Load and validate module
+  try {
+    const module = await loader.loadModule(moduleId);
+    
+    // Health check
+    const health = await healthChecker.checkModuleHealth(
+      moduleId,
+      module.path,
+      module.content
+    );
+    
+    if (health.status === 'critical') {
+      throw new Error(`Module ${moduleId} failed health check`);
+    }
+    
+    loadedModules.push(module);
+    tokenTracker.commitTokens(moduleId, metadata.tokenCount);
+    
+  } catch (error) {
+    tokenTracker.releaseTokens(moduleId);
+    console.error(`Failed to load ${moduleId}:`, error);
+  }
+}
+
+// Activate loaded modules based on classification
+activateModules(loadedModules, classification);
+```
 
 ## Fallback Protocol
 
@@ -55,13 +105,30 @@ If module loading fails:
 
 ## Debug Header
 
-🎯 Active Modules: [modules]
-⚡ Classification: [category] ([confidence])
-📊 Total Tokens: [current] / [budget]
-🕒 Load Time: [ms]
-📈 Telemetry: [cache_hits] / [total_requests]
-🤖 Suggested Agents: [agents]
-🔧 MCP Tools: [tools]
+```typescript
+// Generate debug header with module loader stats
+const debugHeader = {
+  activeModules: loadedModules.map(m => m.id).join(', '),
+  classification: `${classification.category} (${classification.confidence.toFixed(2)})`,
+  tokenUsage: `${tokenTracker.getTotalTokensUsed()} / ${tokenTracker.budget.total}`,
+  loadTime: `${totalLoadTime}ms`,
+  telemetry: `${cacheHits} / ${totalRequests}`,
+  suggestedAgents: classification.suggestedAgents.join(', '),
+  mcpTools: classification.mcpTools.join(', '),
+  health: unhealthyModules.length > 0 ? `⚠️ ${unhealthyModules.length} unhealthy` : '✅ All healthy'
+};
+
+console.log(`
+🎯 Active Modules: ${debugHeader.activeModules}
+⚡ Classification: ${debugHeader.classification}
+📊 Total Tokens: ${debugHeader.tokenUsage}
+🕒 Load Time: ${debugHeader.loadTime}
+📈 Telemetry: ${debugHeader.telemetry}
+🤖 Suggested Agents: ${debugHeader.suggestedAgents}
+🔧 MCP Tools: ${debugHeader.mcpTools}
+💚 Module Health: ${debugHeader.health}
+`);
+```
 
 ## Error Handling
 
