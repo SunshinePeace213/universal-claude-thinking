@@ -20,26 +20,26 @@ describe('CLAUDE.md Orchestrator', () => {
     });
 
     test('should contain required header metadata', () => {
-      expect(orchestratorContent).toContain('version: 1.0.0');
+      expect(orchestratorContent).toContain('version: 2.0.0');
       expect(orchestratorContent).toContain('tokens:');
     });
   });
 
   describe('Classification Categories', () => {
     test('should define all required categories A-E', () => {
-      expect(orchestratorContent).toContain('A/simple');
-      expect(orchestratorContent).toContain('B/complex');
-      expect(orchestratorContent).toContain('C/search');
-      expect(orchestratorContent).toContain('D/code');
-      expect(orchestratorContent).toContain('E/meta');
+      expect(orchestratorContent).toContain('simple');
+      expect(orchestratorContent).toContain('complex');
+      expect(orchestratorContent).toContain('search');
+      expect(orchestratorContent).toContain('code');
+      expect(orchestratorContent).toContain('meta');
     });
 
     test('should map categories to descriptions', () => {
-      expect(orchestratorContent).toMatch(/A\/simple.*Direct questions/);
-      expect(orchestratorContent).toMatch(/B\/complex.*Multi-step reasoning/);
-      expect(orchestratorContent).toMatch(/C\/search.*Finding information/);
-      expect(orchestratorContent).toMatch(/D\/code.*Writing.*debugging/);
-      expect(orchestratorContent).toMatch(/E\/meta.*Self-reflection/);
+      expect(orchestratorContent).toMatch(/simple.*Direct questions/);
+      expect(orchestratorContent).toMatch(/complex.*Multi-step reasoning/);
+      expect(orchestratorContent).toMatch(/search.*Finding information/);
+      expect(orchestratorContent).toMatch(/code.*Writing.*debugging/);
+      expect(orchestratorContent).toMatch(/meta.*Self-reflection/);
     });
   });
 

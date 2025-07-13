@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Request Classifier v2.0.0**: Enhanced classification system (Story 1.3)
+  - Full RequestClassification interface implementation with TypeScript types
+  - LRU cache with 100-entry limit for performance optimization
+  - Weighted scoring for file extensions in code category detection
+  - Telemetry logging for classification metrics and performance tracking
+  - Category priority ordering to handle classification conflicts
+  - Comprehensive test suite with 51 tests (unit, integration, performance)
+  - Performance benchmarks confirming <1ms classification (exceeds 100ms requirement)
+
 - **Testing Infrastructure**: Complete Jest testing framework setup with markdown support
   - Jest v30.0.4 configuration with custom markdown transformers
   - Test helpers for file system mocking and token counting
@@ -39,6 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tests/helpers/markdown-transformer.js` - Jest transformer for .md files
 
 ### Changed
+- **CLAUDE.md Orchestrator**: Upgraded to v2.0.0 with enhanced classifier
+  - Integrated new request-classifier.md module
+  - Updated module loading to use RequestClassification interface
+  - Enhanced debug header with telemetry and MCP tool suggestions
+  - Improved classification categories from A-E to named categories
+
 - **Documentation Formatting**: All markdown files reformatted with Prettier
   - Consistent table formatting in architecture and PRD documents
   - Improved readability and standardized spacing
@@ -50,6 +65,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Included validation results and test coverage analysis
 
 ### Fixed
+- **Classification Logic**: Fixed scoring algorithm bug (BUG-20250113-001)
+  - Changed from averaging scores to accumulating for proper confidence calculation
+  - Added category processing order to resolve search/code classification conflicts
+  - Implemented proper fallback mechanism for low confidence classifications
+
 - **TypeScript Integration**: Resolved CommonJS module compatibility issues
   - Added proper JSDoc type annotations for better IDE support
   - Fixed ESLint configuration for Node.js CommonJS projects
@@ -65,6 +85,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Directory traversal prevention in mock file system
   - Proper input sanitization in test utilities
   - Secure path handling in module loading tests
+
+### Quality Assurance
+- **Story 1.3 QA Review** (2025-07-13): Approved with minor recommendations
+  - Identified opportunities for security enhancement (cache key generation)
+  - Suggested code quality improvements (extract magic numbers)
+  - Recommended telemetry memory management improvements
+  - Proposed pattern matching optimization for better performance
+  - Overall quality assessment: 4/5 stars - High Quality Implementation
 
 ## [1.0.0] - 2025-01-13
 

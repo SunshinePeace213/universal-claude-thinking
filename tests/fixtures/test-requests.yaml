@@ -1,0 +1,137 @@
+# Test Request Fixtures for Classification Testing
+
+simple_requests:
+  - request: "What is JavaScript?"
+    expected_category: "simple"
+    min_confidence: 0.9
+  - request: "How do I install Node.js?"
+    expected_category: "simple"
+    min_confidence: 0.9
+  - request: "Explain what a REST API is"
+    expected_category: "simple"
+    min_confidence: 0.9
+  - request: "Define microservices"
+    expected_category: "simple"
+    min_confidence: 0.9
+
+complex_requests:
+  - request: "Analyze the trade-offs between SQL and NoSQL databases for our e-commerce platform"
+    expected_category: "complex"
+    min_confidence: 0.85
+  - request: "Compare React, Vue, and Angular for building a large-scale enterprise application"
+    expected_category: "complex"
+    min_confidence: 0.85
+  - request: "Evaluate different authentication strategies considering security and user experience"
+    expected_category: "complex"
+    min_confidence: 0.85
+  - request: "Design a scalable architecture for handling millions of concurrent users"
+    expected_category: "complex"
+    min_confidence: 0.85
+
+search_requests:
+  - request: "Find all JavaScript files in the src directory"
+    expected_category: "search"
+    min_confidence: 0.9
+  - request: "Search for the login function implementation"
+    expected_category: "search"
+    min_confidence: 0.9
+  - request: "Locate all configuration files in the project"
+    expected_category: "search"
+    min_confidence: 0.9
+  - request: "Where is the database connection code?"
+    expected_category: "search"
+    min_confidence: 0.9
+  - request: "List all test files with .spec.js extension"
+    expected_category: "search"
+    min_confidence: 0.9
+
+code_requests:
+  - request: "Write a function to validate email addresses using regex"
+    expected_category: "code"
+    min_confidence: 0.9
+  - request: "Implement a binary search algorithm in JavaScript"
+    expected_category: "code"
+    min_confidence: 0.9
+  - request: "Fix the authentication bug in user.service.js"
+    expected_category: "code"
+    min_confidence: 0.9
+  - request: "Debug the memory leak in our WebSocket implementation"
+    expected_category: "code"
+    min_confidence: 0.9
+  - request: "Refactor the UserController class to follow SOLID principles"
+    expected_category: "code"
+    min_confidence: 0.9
+
+meta_requests:
+  - request: "How do you approach solving complex problems?"
+    expected_category: "meta"
+    min_confidence: 0.85
+  - request: "What is your process for debugging?"
+    expected_category: "meta"
+    min_confidence: 0.85
+  - request: "Why did you choose that particular implementation?"
+    expected_category: "meta"
+    min_confidence: 0.85
+  - request: "Can you explain your reasoning?"
+    expected_category: "meta"
+    min_confidence: 0.85
+
+edge_cases:
+  - request: ""
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "Empty request should fallback to simple"
+  - request: "   "
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "Whitespace-only request should fallback to simple"
+  - request: "!!!"
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "Non-alphabetic request should fallback to simple"
+  - request: "hello"
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "Ambiguous single word should fallback to simple"
+
+file_extension_tests:
+  - request: "Fix the error in app.js"
+    expected_category: "code"
+    min_confidence: 0.9
+    notes: "Should recognize .js extension"
+  - request: "Debug the TypeScript file main.ts"
+    expected_category: "code"
+    min_confidence: 0.9
+    notes: "Should recognize .ts extension"
+  - request: "Update the Python script data_processor.py"
+    expected_category: "code"
+    min_confidence: 0.9
+    notes: "Should recognize .py extension"
+  - request: "Refactor the Java class UserService.java"
+    expected_category: "code"
+    min_confidence: 0.9
+    notes: "Should recognize .java extension"
+
+malformed_import_paths:
+  - request: "Import ../../../../../../../etc/passwd"
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "Malicious path should be handled safely"
+  - request: "Load module from http://evil.com/malware.js"
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "External URLs should be handled safely"
+  - request: "Include file:///etc/shadow"
+    expected_category: "simple"
+    min_confidence: 0.8
+    notes: "File protocol URLs should be handled safely"
+
+circular_dependency_tests:
+  - request: "Import module A that imports module B that imports module A"
+    expected_category: "code"
+    min_confidence: 0.85
+    notes: "Should handle circular dependency discussion"
+  - request: "Debug circular reference in module loader"
+    expected_category: "code"
+    min_confidence: 0.9
+    notes: "Should recognize debugging of circular deps"
