@@ -1,0 +1,7 @@
+# Next Steps
+
+## UX Expert Prompt
+**Initiate UX Architecture Mode**: "Based on the Universal Claude Thinking v2 PRD, create a comprehensive UX architecture that translates the 7-layer cognitive architecture and Enhanced Sub-Agent coordination into intuitive user interfaces. Focus on visualizing cognitive processes, specialist coordination, and memory systems in ways that provide transparency without overwhelming users. Design interaction patterns that leverage the parallel processing capabilities while maintaining simplicity for both technical and non-technical users."
+
+## Architect Prompt
+**Initiate Technical Architecture Mode**: "Using the Universal Claude Thinking v2 PRD as foundation, design the complete technical architecture for the Programmable Cognitive Intelligence Platform. Implement the 7-layer Context Engineering system (Atomic→Molecular→Cellular→Organ→Cognitive Tools→Prompt Programming→Sub-Agent Management) with Enhanced Sub-Agent Architecture, ensuring native `/agents` integration, true parallel processing through individual context windows, and SWARM-based memory systems. Provide detailed implementation specifications for all 16+ cognitive capabilities while maintaining the 80% complexity reduction goal."
