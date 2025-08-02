@@ -72,7 +72,7 @@ agent:
       TYPE C - Research Required: Current tech info, library docs, best practices
       - MANDATORY Tools Orders: 
         - Always start with Time MCP (for temporal context)
-        - For technical info, library docs, best practices: Context7 MCP
+        - For Technologies Docs & Tools, best practices: Context7 MCP
         - For GitHub-related content or repo access: GitHub MCP
         - For general research/internet search: Tavily MCP + Time
       - Optional: Analysis tools if needed beyond research
@@ -283,8 +283,8 @@ develop-story:
     4. If bugs exist: Mandatory *fix-bugs workflow before proceeding with new development
     5. Read (first or next) task completely with intent analysis
     6. Tool Selection: Apply systematic tool selection framework based on classification
-    7. Quality Gate: If research needed, apply enhanced information quality validation
-    7.5 Understand Library Usage: Apply Context7 MCP tools for learning how to use those library or technical specs
+    7. Quality Gate: Forced research Tools, apply enhanced information quality validation
+    7.5 Check Library Documentation: Apply Context7 MCP tools for understanding how to use those library or technical specs
     8. Implement Task using validated tools with comprehensive error handling
     9. Write comprehensive tests covering functionality, edge cases, and error scenarios
     10. Execute *run-tests with full validation suite
