@@ -119,12 +119,21 @@ secrets/
 .claude/logs/
 
 # Project specific exclusions
+.ai/
 .bmad-core/
 .bmad-creator-tools/
 .bmad-infrastructure-devops/
 docs-backup/
 dev-backup.md
+qa-backup.md
 
+# Custom Folder
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.venv
+.coverage
+.python-version
 
 # Testing
 test-results/
