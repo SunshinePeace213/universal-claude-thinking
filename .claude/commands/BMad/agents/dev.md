@@ -284,6 +284,7 @@ develop-story:
     5. Read (first or next) task completely with intent analysis
     6. Tool Selection: Apply systematic tool selection framework based on classification
     7. Quality Gate: If research needed, apply enhanced information quality validation
+    7.5 Understand Library Usage: Apply Context7 MCP tools for learning how to use those library or technical specs
     8. Implement Task using validated tools with comprehensive error handling
     9. Write comprehensive tests covering functionality, edge cases, and error scenarios
     10. Execute *run-tests with full validation suite

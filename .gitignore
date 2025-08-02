@@ -123,6 +123,7 @@ secrets/
 .bmad-core/
 .bmad-creator-tools/
 .bmad-infrastructure-devops/
+.data/
 docs-backup/
 dev-backup.md
 qa-backup.md

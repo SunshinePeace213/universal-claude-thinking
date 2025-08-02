@@ -3,45 +3,29 @@
 import hashlib
 import re
 import time
-from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING
 
+from .models import AtomicAnalysis
 from .safety import SafetyValidator
 from .scorer import QualityScorer
 
-
-@dataclass
-class AtomicAnalysis:
-    """Result of atomic prompt analysis."""
-
-    structure: dict[str, str | None]
-    quality_score: float
-    gaps: list[str]
-    enhancement_suggestions: list[str]
-    processing_time_ms: float
-    prompt_hash: str
-    rationale: str | None = None
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "structure": self.structure,
-            "quality_score": self.quality_score,
-            "gaps": self.gaps,
-            "enhancement_suggestions": self.enhancement_suggestions,
-            "processing_time_ms": self.processing_time_ms,
-            "prompt_hash": self.prompt_hash,
-            "rationale": self.rationale,
-        }
+if TYPE_CHECKING:
+    from ..storage.atomic_repository import AtomicAnalysisRepository
 
 
 class AtomicFoundation:
     """Core atomic prompt analysis and enhancement."""
 
-    def __init__(self) -> None:
+    def __init__(self, repository: "AtomicAnalysisRepository | None" = None) -> None:
+        """Initialize atomic foundation.
+
+        Args:
+            repository: Optional AtomicAnalysisRepository for caching
+        """
         self.gap_analyzer = GapAnalyzer()
         self.quality_scorer = QualityScorer()
         self.safety_validator = SafetyValidator()
+        self.repository = repository
 
     async def analyze_prompt(self, prompt: str) -> AtomicAnalysis:
         """Analyze prompt structure and return quality assessment.
@@ -74,6 +58,22 @@ class AtomicFoundation:
         # Generate prompt hash for caching
         prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()[:16]
 
+        # Check cache if repository is available
+        if self.repository:
+            try:
+                cached = await self.repository.get_by_hash(prompt_hash)
+                if cached:
+                    # Increment usage count
+                    await self.repository.increment_usage(prompt_hash)
+                    # Return cached analysis
+                    processing_time_ms = (time.time() - start_time) * 1000
+                    analysis = AtomicAnalysis.from_dict(cached)
+                    analysis.processing_time_ms = processing_time_ms
+                    return analysis
+            except Exception:
+                # Continue with analysis if cache fails
+                pass
+
         # Extract atomic structure components
         structure = self._extract_structure(prompt)
 
@@ -90,7 +90,7 @@ class AtomicFoundation:
 
         processing_time_ms = (time.time() - start_time) * 1000
 
-        return AtomicAnalysis(
+        analysis = AtomicAnalysis(
             structure=structure,
             quality_score=quality_score,
             gaps=gaps,
@@ -99,6 +99,22 @@ class AtomicFoundation:
             prompt_hash=prompt_hash,
             rationale=rationale,
         )
+
+        # Store in cache if repository is available
+        if self.repository:
+            try:
+                await self.repository.save_analysis(
+                    prompt_hash=prompt_hash,
+                    structure=structure,
+                    quality_score=quality_score,
+                    gaps=gaps,
+                    suggestions=suggestions,
+                )
+            except Exception:
+                # Continue even if caching fails
+                pass
+
+        return analysis
 
     def _extract_structure(self, prompt: str) -> dict[str, str | None]:
         """Extract Task, Constraints, and Output Format from prompt.

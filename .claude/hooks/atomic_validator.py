@@ -12,6 +12,8 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.core.atomic import AtomicFoundation
+from src.core.storage.db import DatabaseConnection
+from src.core.storage.atomic_repository import AtomicAnalysisRepository
 
 # Tools that should have quality-checked prompts
 QUALITY_CHECK_TOOLS = [
@@ -50,37 +52,53 @@ async def main():
             # No prompt content to validate
             sys.exit(0)
         
-        # Initialize atomic foundation
-        atomic = AtomicFoundation()
+        # Initialize database and atomic foundation with repository
+        db = None
+        repository = None
+        try:
+            db = DatabaseConnection()
+            await db.initialize_schema()
+            repository = AtomicAnalysisRepository(db)
+        except Exception:
+            # Continue without database if initialization fails
+            pass
         
-        # Analyze the prompt
-        analysis = await atomic.analyze_prompt(prompt_content)
-        
-        # Check if quality is too low
-        if analysis.quality_score < 4.0:
-            # Block execution with quality warning
-            print(
-                f"⛔ Tool execution blocked: Prompt quality too low "
-                f"({analysis.quality_score}/10.0)\n\n"
-                f"The prompt lacks clarity in these areas: {', '.join(analysis.gaps)}\n\n"
-                f"Please enhance your prompt with:\n"
-            )
+        try:
+            atomic = AtomicFoundation(repository=repository)
             
-            for suggestion in analysis.enhancement_suggestions[:2]:
-                print(f"  • {suggestion}")
+            # Analyze the prompt
+            analysis = await atomic.analyze_prompt(prompt_content)
             
-            # Exit with error to block tool execution
-            sys.exit(1)
-        
-        # Log warning for moderate quality
-        elif analysis.quality_score < 7.0:
-            print(
-                f"⚠️ Prompt quality is moderate ({analysis.quality_score}/10.0). "
-                f"Consider enhancing for better results."
-            )
-        
-        # Exit successfully
-        sys.exit(0)
+            # Check if quality is too low
+            if analysis.quality_score < 4.0:
+                # Block execution with quality warning
+                print(
+                    f"⛔ Tool execution blocked: Prompt quality too low "
+                    f"({analysis.quality_score}/10.0)\n\n"
+                    f"The prompt lacks clarity in these areas: {', '.join(analysis.gaps)}\n\n"
+                    f"Please enhance your prompt with:\n"
+                )
+                
+                for suggestion in analysis.enhancement_suggestions[:2]:
+                    print(f"  • {suggestion}")
+                
+                # Exit with error to block tool execution
+                sys.exit(1)
+            
+            # Log warning for moderate quality
+            elif analysis.quality_score < 7.0:
+                print(
+                    f"⚠️ Prompt quality is moderate ({analysis.quality_score}/10.0). "
+                    f"Consider enhancing for better results."
+                )
+            
+            # Exit successfully
+            sys.exit(0)
+            
+        finally:
+            # Cleanup database connection
+            if db:
+                await db.close()
         
     except Exception as e:
         # Log error but don't block execution

@@ -33,6 +33,23 @@ Universal Claude Thinking v2 is a revolutionary transformation from a monolithic
 - **Report** (`/report`): Analytics, metrics, and comprehensive reporting
 - **Maintain** (`/maintain`): Cleanup, optimization, and system maintenance
 
+## Database Setup
+
+The project uses SQLite for storing atomic analyses and prompt caching:
+
+1. **Initialize the database** (optional - auto-created on first use):
+   ```bash
+   uv run python scripts/init_db.py
+   ```
+
+2. **Database location**: `data/thinking_v2.db`
+
+3. **Features**:
+   - Automatic caching of prompt analyses
+   - Usage tracking for frequently analyzed prompts
+   - Performance optimization with indexed lookups
+   - Graceful fallback if database is unavailable
+
 ## Installation Methods
 
 ### 🚀 Method 1: Direct Installation (Recommended)

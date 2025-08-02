@@ -2,17 +2,21 @@
 
 import asyncio
 import pytest
+import tempfile
 import time
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from src.core.atomic import (
     AtomicFoundation,
-    AtomicAnalysis,
     GapAnalyzer,
     QualityScorer,
     ChainOfVerification,
     SafetyValidator
 )
+from src.core.atomic.models import AtomicAnalysis
+from src.core.storage.db import DatabaseConnection
+from src.core.storage.atomic_repository import AtomicAnalysisRepository
 
 
 class TestAtomicFoundation:
@@ -347,6 +351,116 @@ class TestPerformance:
             
             assert elapsed_ms < 600  # Allow some overhead
             assert analysis.processing_time_ms < 500
+
+
+class TestAtomicFoundationWithDatabase:
+    """Test AtomicFoundation with database integration."""
+    
+    @pytest.fixture
+    async def temp_db(self):
+        """Create temporary database for testing."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
+            db_path = tmp.name
+        
+        db = DatabaseConnection(db_path)
+        await db.initialize_schema()
+        
+        yield db
+        
+        await db.close()
+        Path(db_path).unlink()
+    
+    @pytest.fixture
+    async def atomic_with_db(self, temp_db):
+        """Create AtomicFoundation with database repository."""
+        repository = AtomicAnalysisRepository(temp_db)
+        return AtomicFoundation(repository=repository)
+    
+    @pytest.mark.asyncio
+    async def test_caching_identical_prompts(self, atomic_with_db):
+        """Test that identical prompts are cached."""
+        prompt = "Write a function to sort a list"
+        
+        # First analysis
+        start1 = time.time()
+        analysis1 = await atomic_with_db.analyze_prompt(prompt)
+        time1 = time.time() - start1
+        
+        # Second analysis (should be cached)
+        start2 = time.time()
+        analysis2 = await atomic_with_db.analyze_prompt(prompt)
+        time2 = time.time() - start2
+        
+        # Cache hit should be much faster
+        assert time2 < time1 * 0.5  # At least 2x faster
+        assert analysis1.prompt_hash == analysis2.prompt_hash
+        assert analysis1.quality_score == analysis2.quality_score
+        assert analysis1.gaps == analysis2.gaps
+    
+    @pytest.mark.asyncio
+    async def test_cache_different_prompts(self, atomic_with_db):
+        """Test that different prompts are analyzed separately."""
+        prompt1 = "Write a sorting function"
+        prompt2 = "Create a search algorithm"
+        
+        analysis1 = await atomic_with_db.analyze_prompt(prompt1)
+        analysis2 = await atomic_with_db.analyze_prompt(prompt2)
+        
+        assert analysis1.prompt_hash != analysis2.prompt_hash
+        # Structure might be different
+        assert analysis1.structure["task"] != analysis2.structure["task"]
+    
+    @pytest.mark.asyncio
+    async def test_repository_failure_fallback(self, atomic_with_db):
+        """Test that analysis continues even if repository fails."""
+        # Mock repository to fail
+        atomic_with_db.repository.get_by_hash = Mock(side_effect=Exception("DB Error"))
+        atomic_with_db.repository.save_analysis = Mock(side_effect=Exception("DB Error"))
+        
+        # Should still work
+        prompt = "Test prompt with failing repository"
+        analysis = await atomic_with_db.analyze_prompt(prompt)
+        
+        assert isinstance(analysis, AtomicAnalysis)
+        assert analysis.quality_score > 0
+        assert analysis.processing_time_ms < 500
+    
+    @pytest.mark.asyncio
+    async def test_performance_with_database(self, atomic_with_db):
+        """Test that database operations don't violate <500ms constraint."""
+        prompts = [
+            "Simple task",
+            "Complex task with multiple constraints and specific output format",
+            "Another task requiring careful analysis and enhancement suggestions",
+            "Write code with error handling and proper documentation",
+            "Create an API endpoint with validation and JSON response"
+        ]
+        
+        for prompt in prompts:
+            start = time.time()
+            analysis = await atomic_with_db.analyze_prompt(prompt)
+            elapsed = (time.time() - start) * 1000
+            
+            assert elapsed < 500  # Performance constraint
+            assert isinstance(analysis, AtomicAnalysis)
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_access(self, atomic_with_db):
+        """Test concurrent database access."""
+        prompt = "Concurrent test prompt"
+        
+        # Run multiple analyses concurrently
+        tasks = [
+            atomic_with_db.analyze_prompt(prompt)
+            for _ in range(5)
+        ]
+        
+        results = await asyncio.gather(*tasks)
+        
+        # All should succeed and have same hash
+        hashes = [r.prompt_hash for r in results]
+        assert len(set(hashes)) == 1  # All same hash
+        assert all(isinstance(r, AtomicAnalysis) for r in results)
 
 
 if __name__ == "__main__":
