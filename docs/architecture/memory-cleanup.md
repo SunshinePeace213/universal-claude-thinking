@@ -1,2 +1,0 @@
-# Memory Cleanup
-```bash

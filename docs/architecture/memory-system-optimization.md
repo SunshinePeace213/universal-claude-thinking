@@ -1,2 +1,0 @@
-# Memory System Optimization
-```bash

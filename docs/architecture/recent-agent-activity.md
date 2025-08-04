@@ -1,2 +1,0 @@
-# Recent Agent Activity
-```bash

@@ -1,2 +1,0 @@
-# Checking Core Components
-```bash

@@ -1,2 +1,0 @@
-# Creating Directory Structure
-```bash

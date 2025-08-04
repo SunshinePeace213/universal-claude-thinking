@@ -159,7 +159,7 @@ The following architectural patterns guide the implementation of the cognitive i
 ## Technology Stack
 
 ### Core Technologies
-- **Primary Language**: Python 3.12+ with full type annotations (Python 3.12.11)
+- **Primary Language**: Python 3.12+ with full type annotations (Python 3.12.8 recommended)
 - **Package Management**: uv for fast, reliable dependency resolution
 - **Async Framework**: asyncio for concurrent operations
 - **Type System**: Pydantic v2 for data validation
@@ -170,7 +170,7 @@ The following architectural patterns guide the implementation of the cognitive i
 |----------|---------|---------|---------|--------------|  
 | **Core Runtime & Package Management** |
 | Python | 3.12.11 | Runtime environment | Latest stable with full Apple Silicon support |
-| uv | 0.8.4 | Fast package manager | 10-100x faster than pip, Rust-based |
+| uv | 0.8.3 | Fast package manager | 10-100x faster than pip, Rust-based |
 | pip | 24.3.1 | Fallback package manager | For packages not in uv |
 | setuptools | 80.9.0 | Package building | Modern PEP 517 support |
 | wheel | 0.45.1 | Wheel package support | Universal2 wheels for M3 |

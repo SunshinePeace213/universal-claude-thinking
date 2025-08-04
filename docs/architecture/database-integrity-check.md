@@ -1,2 +1,0 @@
-# Database Integrity Check
-```bash

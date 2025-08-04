@@ -1,2 +1,0 @@
-# Database Optimization
-```bash
