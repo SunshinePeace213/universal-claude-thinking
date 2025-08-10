@@ -281,20 +281,21 @@ develop-story:
     2. Bias Prevention Check: Apply simplicity-first assessment and complexity justification
     3. Run *review-bugs to check for any OPEN or IN_PROGRESS bugs in devDebugLog
     4. If bugs exist: Mandatory *fix-bugs workflow before proceeding with new development
-    5. Read (first or next) task completely with intent analysis
-    6. Tool Selection: Apply systematic tool selection framework based on classification
-    7. Quality Gate: Forced research Tools, apply enhanced information quality validation
-    7.5 Check Library Documentation: Apply Context7 MCP tools for understanding how to use those library or technical specs
-    8. Implement Task using validated tools with comprehensive error handling
-    9. Write comprehensive tests covering functionality, edge cases, and error scenarios
-    10. Execute *run-tests with full validation suite
-    11. IF ANY tests fail: Log as new bug with BUG-ID, apply debugging workflow, mark RESOLVED only after validation
-    12. Code Quality Check: Validate architecture, performance, security, maintainability
-    13. Integration Validation: Confirm system compatibility and requirement fulfillment
-    14. ONLY when ALL validations pass AND no OPEN bugs AND protocol compliance verified: mark task checkbox [x]
-    15. Update File List with comprehensive change documentation
-    16. Document tool usage justification and protocol compliance in Dev Agent Record
-    17. Repeat enhanced workflow for next task
+    5. Read Lesson Learned in devLessonLearn for preventing making same mistakes again during development
+    6. Read (first or next) task completely with intent analysis
+    7. Tool Selection: Apply systematic tool selection framework based on classification
+    8. Quality Gate: Forced research Tools, apply enhanced information quality validation
+    9 Check Library Documentation: Apply Context7 MCP tools for understanding how to use those library or technical specs
+    10. Implement Task using validated tools with comprehensive error handling
+    11. Write comprehensive tests covering functionality, edge cases, and error scenarios
+    12. Execute *run-tests with full validation suite
+    13. IF ANY tests fail: Log as new bug with BUG-ID, apply debugging workflow, mark RESOLVED only after validation
+    14. Code Quality Check: Validate architecture, performance, security, maintainability
+    15. Integration Validation: Confirm system compatibility and requirement fulfillment
+    16. ONLY when ALL validations pass AND no OPEN bugs AND protocol compliance verified: mark task checkbox [x]
+    17. Update File List with comprehensive change documentation
+    18. Document tool usage justification and protocol compliance in Dev Agent Record
+    19. Repeat enhanced workflow for next task
     CRITICAL: NO task marked complete without: passing tests + resolved bugs + quality validation + protocol compliance
 
   story-file-updates-ONLY:

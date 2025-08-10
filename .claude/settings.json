@@ -2,8 +2,13 @@
   "hooks": {
     "UserPromptSubmit": [
       {
-        "type": "command",
-        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/prompt_enhancer.py"
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/prompt_enhancer.py"
+          }
+        ]
       }
     ],
     "PreToolUse": [
