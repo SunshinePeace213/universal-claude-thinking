@@ -243,3 +243,93 @@ class AtomicAnalysisRepository:
                 "most_used_hash": most_used[0] if most_used else None,
                 "most_used_count": most_used[1] if most_used else 0,
             }
+    
+    async def save_pattern_learning_opportunity(
+        self,
+        prompt: str,
+        delegation_method: str,
+        session_id: str | None = None,
+        metadata: dict[str, Any] | None = None
+    ) -> str:
+        """Save a pattern learning opportunity when prompts don't match patterns.
+        
+        Args:
+            prompt: The unmatched prompt
+            delegation_method: How it was delegated (usually 'fallback')
+            session_id: Session identifier
+            metadata: Additional metadata
+        
+        Returns:
+            ID of saved opportunity
+        """
+        opportunity_id = generate_uuid()
+        
+        async with self.db.connect() as conn:
+            await conn.execute(
+                """
+                INSERT INTO pattern_learning_opportunities
+                (id, prompt, delegation_method, session_id, metadata, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    opportunity_id,
+                    prompt[:500],  # Limit prompt length
+                    delegation_method,
+                    session_id,
+                    self._encoder.encode(metadata or {}),
+                    datetime.now(UTC).isoformat(),
+                ),
+            )
+            await conn.commit()
+        
+        return opportunity_id
+    
+    async def save_pattern_validation(
+        self,
+        prompt: str,
+        tool_name: str,
+        quality_score: float,
+        matched: bool,
+        agent: str | None = None,
+        confidence: float | None = None,
+        session_id: str | None = None
+    ) -> str:
+        """Save pattern validation result from hook processing.
+        
+        Args:
+            prompt: The validated prompt
+            tool_name: Tool being validated for
+            quality_score: Prompt quality score
+            matched: Whether patterns matched
+            agent: Matched agent (if any)
+            confidence: Match confidence (if matched)
+            session_id: Session identifier
+        
+        Returns:
+            ID of saved validation
+        """
+        validation_id = generate_uuid()
+        
+        async with self.db.connect() as conn:
+            await conn.execute(
+                """
+                INSERT INTO pattern_validations
+                (id, prompt, tool_name, quality_score, matched, agent, 
+                 confidence, session_id, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    validation_id,
+                    prompt[:500],  # Limit prompt length
+                    tool_name,
+                    quality_score,
+                    matched,
+                    agent,
+                    confidence,
+                    session_id,
+                    datetime.now(UTC).isoformat(),
+                ),
+            )
+            await conn.commit()
+        
+        return validation_id

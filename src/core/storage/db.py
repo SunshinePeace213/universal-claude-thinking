@@ -79,6 +79,58 @@ class DatabaseConnection:
                 CREATE INDEX IF NOT EXISTS idx_quality_score 
                 ON atomic_analyses(quality_score DESC)
             """)
+            
+            # Create pattern_learning_opportunities table
+            await db.execute("""
+                CREATE TABLE IF NOT EXISTS pattern_learning_opportunities (
+                    id TEXT PRIMARY KEY,
+                    prompt TEXT NOT NULL,
+                    delegation_method TEXT NOT NULL,
+                    session_id TEXT,
+                    metadata TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            await db.execute("""
+                CREATE INDEX IF NOT EXISTS idx_plo_created_at 
+                ON pattern_learning_opportunities(created_at DESC)
+            """)
+            
+            await db.execute("""
+                CREATE INDEX IF NOT EXISTS idx_plo_delegation 
+                ON pattern_learning_opportunities(delegation_method)
+            """)
+            
+            # Create pattern_validations table
+            await db.execute("""
+                CREATE TABLE IF NOT EXISTS pattern_validations (
+                    id TEXT PRIMARY KEY,
+                    prompt TEXT NOT NULL,
+                    tool_name TEXT NOT NULL,
+                    quality_score REAL,
+                    matched BOOLEAN NOT NULL,
+                    agent TEXT,
+                    confidence REAL,
+                    session_id TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            await db.execute("""
+                CREATE INDEX IF NOT EXISTS idx_pv_created_at 
+                ON pattern_validations(created_at DESC)
+            """)
+            
+            await db.execute("""
+                CREATE INDEX IF NOT EXISTS idx_pv_tool 
+                ON pattern_validations(tool_name)
+            """)
+            
+            await db.execute("""
+                CREATE INDEX IF NOT EXISTS idx_pv_matched 
+                ON pattern_validations(matched)
+            """)
 
             await db.commit()
 
