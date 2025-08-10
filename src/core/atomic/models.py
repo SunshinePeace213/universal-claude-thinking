@@ -1,7 +1,7 @@
 """Data models for atomic prompt analysis."""
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 
 @dataclass
@@ -16,7 +16,7 @@ class AtomicAnalysis:
     prompt_hash: str
     rationale: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
             "structure": self.structure,
@@ -29,7 +29,7 @@ class AtomicAnalysis:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "AtomicAnalysis":
+    def from_dict(cls, data: dict[str, Any]) -> "AtomicAnalysis":
         """Create instance from dictionary.
 
         Args:

@@ -12,8 +12,19 @@ authors = [
 dependencies = [
     # Core dependencies
     "pydantic>=2.10.4",
-    "aiofiles>=24.1.0",
+    "pyyaml>=6.0.1",
+    "aiofiles>=23.2.1",
     "aiosqlite>=0.20.0",
+    "aiohttp>=3.10.0",
+    "uvloop>=0.21.0",
+    
+    # ML/Embeddings
+    "sentence-transformers>=5.0.0",
+    "torch>=2.7.1",
+    "transformers>=4.54.0",
+    
+    # Vector storage
+    "chromadb>=1.0.15",
 ]
 
 [project.optional-dependencies]

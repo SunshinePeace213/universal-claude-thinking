@@ -1,0 +1,234 @@
+# Delegation System Configuration
+# Part of Story 1.2: Request Classification Engine with Delegation Integration
+# 3-stage hybrid delegation settings
+
+delegation_engine:
+  # Enable/disable delegation stages
+  stages:
+    keyword_matching:
+      enabled: true
+      timeout_ms: 10  # Must be <10ms for Type A
+      confidence_threshold: 0.9
+      
+    semantic_matching:
+      enabled: true
+      timeout_ms: 100  # 50-100ms acceptable
+      confidence_threshold: 0.7
+      max_candidates: 5
+      
+    pe_fallback:
+      enabled: true
+      timeout_ms: 200  # 100-200ms acceptable
+      always_enhance_below: 0.5
+      
+  # Overall engine settings
+  engine_settings:
+    max_total_timeout_ms: 300
+    enable_caching: true
+    cache_ttl_seconds: 300
+    parallel_stages: false  # Run stages sequentially
+    
+# Classification settings
+classification:
+  # Task type confidence thresholds
+  type_thresholds:
+    TYPE_A: 0.95  # Simple/Direct - highest confidence required
+    TYPE_B: 0.85  # Complex/Multi-step
+    TYPE_C: 0.90  # Research Required
+    TYPE_D: 0.85  # Web/Testing
+    TYPE_E: 0.80  # Debugging/Error - lowest threshold
+    
+  # Pattern matching settings
+  pattern_matching:
+    case_sensitive: false
+    use_stemming: false
+    use_synonyms: true
+    max_pattern_length: 100
+    
+  # Performance targets
+  performance_targets:
+    classification_accuracy: 0.95  # >95% accuracy target
+    avg_processing_time_ms: 50
+    max_processing_time_ms: 500
+    
+# Agent configuration
+agents:
+  # Agent capabilities and triggers
+  PE:
+    name: "Prompt Enhancer"
+    icon: "🔧"
+    capabilities:
+      - "prompt enhancement"
+      - "input validation"
+      - "quality assessment"
+      - "clarification"
+    primary_triggers:
+      - "enhance"
+      - "improve"
+      - "clarify"
+      - "refine"
+      
+  R1:
+    name: "Researcher"
+    icon: "🔍"
+    capabilities:
+      - "web search"
+      - "data gathering"
+      - "source verification"
+      - "research compilation"
+    primary_triggers:
+      - "research"
+      - "search"
+      - "find"
+      - "lookup"
+      
+  A1:
+    name: "Reasoner"
+    icon: "🧠"
+    capabilities:
+      - "logical analysis"
+      - "problem solving"
+      - "reasoning chains"
+      - "debugging"
+    primary_triggers:
+      - "analyze"
+      - "solve"
+      - "debug"
+      - "reason"
+      
+  E1:
+    name: "Evaluator"
+    icon: "📊"
+    capabilities:
+      - "quality assessment"
+      - "validation"
+      - "error detection"
+      - "code review"
+    primary_triggers:
+      - "evaluate"
+      - "assess"
+      - "review"
+      - "validate"
+      
+  T1:
+    name: "Tool User"
+    icon: "🛠️"
+    capabilities:
+      - "tool execution"
+      - "automation"
+      - "system interaction"
+      - "browser control"
+    primary_triggers:
+      - "execute"
+      - "automate"
+      - "browser"
+      - "tool"
+      
+  W1:
+    name: "Writer"
+    icon: "🖋️"
+    capabilities:
+      - "content creation"
+      - "documentation"
+      - "copywriting"
+      - "technical writing"
+    primary_triggers:
+      - "write"
+      - "create"
+      - "draft"
+      - "compose"
+      
+  I1:
+    name: "Interface"
+    icon: "🗣️"
+    capabilities:
+      - "user interaction"
+      - "clarification"
+      - "communication"
+      - "interface design"
+    primary_triggers:
+      - "interact"
+      - "clarify"
+      - "communicate"
+      - "interface"
+      
+# Confidence scoring weights
+confidence_scoring:
+  # Factor weights (must sum to 1.0)
+  factor_weights:
+    classification: 0.30
+    keyword_match: 0.25
+    semantic_similarity: 0.25
+    context_quality: 0.10
+    input_clarity: 0.10
+    
+  # Boost factors
+  boosts:
+    task_type_match: 1.1  # Boost when agent matches task type
+    multiple_patterns: 1.05  # Boost per additional pattern matched
+    high_quality_input: 1.15  # Boost for quality score >= 7
+    
+  # Penalty factors
+  penalties:
+    ambiguous_input: 0.8
+    very_short_input: 0.9  # Less than 5 words
+    very_long_input: 0.95  # More than 100 words
+    
+# Metrics and monitoring
+metrics:
+  # Database settings
+  database:
+    path: "./data/delegation_metrics.db"
+    enable_wal: true  # Write-Ahead Logging for performance
+    vacuum_on_startup: false
+    
+  # Tracking settings
+  tracking:
+    track_all_requests: true
+    track_confidence_factors: true
+    track_performance_metrics: true
+    anonymize_prompts: false
+    
+  # Retention settings
+  retention:
+    keep_metrics_days: 90
+    keep_raw_data_days: 30
+    aggregate_after_days: 7
+    
+# Mac-specific performance settings
+mac_performance:
+  # Platform detection
+  auto_detect_platform: true
+  
+  # Unified memory optimizations
+  unified_memory:
+    enable_optimizations: true
+    preallocate_buffers: false
+    use_zero_copy: true
+    
+  # Metal Performance Shaders
+  mps_settings:
+    enable_mps: true
+    high_watermark_ratio: 0.0
+    allocator_policy: "garbage_collection"
+    
+  # Neural Engine
+  neural_engine:
+    use_if_available: true
+    prefer_over_gpu: false
+    
+# Fallback settings
+fallback:
+  # When to use fallback
+  triggers:
+    no_pattern_match: true
+    low_confidence: true  # Below threshold
+    timeout_exceeded: true
+    error_in_delegation: true
+    
+  # PE enhancement settings
+  pe_enhancement:
+    always_request_clarification: false
+    suggest_alternatives: true
+    provide_examples: true
+    max_enhancement_attempts: 2

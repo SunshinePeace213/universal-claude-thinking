@@ -1,7 +1,7 @@
 """Repository for atomic analysis database operations."""
 
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List
+from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from .db import DatabaseConnection, JSONEncoder, generate_uuid
 
@@ -71,14 +71,14 @@ class AtomicAnalysisRepository:
                     quality_score,
                     self._encoder.encode(gaps),
                     self._encoder.encode(suggestions),
-                    datetime.now(timezone.utc),
+                    datetime.now(UTC),
                 ),
             )
             await conn.commit()
 
         return analysis_id
 
-    async def get_by_hash(self, prompt_hash: str) -> Dict[str, Any] | None:
+    async def get_by_hash(self, prompt_hash: str) -> dict[str, Any] | None:
         """Retrieve analysis by prompt hash.
 
         Args:
@@ -132,7 +132,7 @@ class AtomicAnalysisRepository:
 
     async def get_recent(
         self, limit: int = 10, min_score: float | None = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Get recent analyses.
 
         Args:
@@ -183,7 +183,7 @@ class AtomicAnalysisRepository:
         Returns:
             Number of deleted records
         """
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
+        cutoff_date = datetime.now(UTC) - timedelta(days=days)
 
         async with self.db.connect() as conn:
             # Delete old records with low usage
@@ -197,7 +197,7 @@ class AtomicAnalysisRepository:
             await conn.commit()
             return cursor.rowcount
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """Get repository statistics.
 
         Returns:

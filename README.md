@@ -48,6 +48,52 @@ The project uses SQLite for storing atomic analyses and prompt caching:
    - Automatic caching of prompt analyses
    - Usage tracking for frequently analyzed prompts
    - Performance optimization with indexed lookups
+
+## Request Classification & Delegation
+
+### Classification System
+
+The platform uses a priority-based classification system (E→D→C→B→A) to route requests:
+
+- **Type E** - Debugging/Error Resolution (reactive problem-solving)
+- **Type D** - Web/Testing (specialized testing workflows)
+- **Type C** - Research Required (information gathering)
+- **Type B** - Complex/Multi-step (proactive development)
+- **Type A** - Simple/Direct (basic information)
+
+### Confidence Threshold Matrix
+
+| Task Type | Min Confidence | Delegation Method | Fallback |
+|-----------|---------------|-------------------|----------|
+| TYPE_A | 0.7 | Keyword Match | Semantic |
+| TYPE_B | 0.7 | Keyword/Semantic | PE Enhancement |
+| TYPE_C | 0.7 | Semantic Match | PE Enhancement |
+| TYPE_D | 0.7 | Semantic Match | PE Enhancement |
+| TYPE_E | 0.7 | Keyword/Semantic | PE Enhancement |
+
+**Note:** Confidence below threshold triggers next delegation stage or PE fallback.
+
+### 3-Stage Delegation System
+
+1. **Stage 1: Keyword Matching** (<10ms)
+   - Fast pattern matching for high-confidence routing
+   - 0.9+ confidence threshold for direct delegation
+
+2. **Stage 2: Semantic Matching** (50-100ms)
+   - Embedding-based similarity matching
+   - 0.7+ confidence threshold for delegation
+
+3. **Stage 3: PE Fallback** (100-200ms)
+   - Routes to Prompt Enhancer for clarification
+   - Always returns 1.0 confidence after enhancement
+
+### Performance Targets
+
+- Classification: <500ms (typically <1ms)
+- Keyword Matching: <10ms requirement
+- Semantic Matching: 50-100ms acceptable range
+- Overall Pipeline: <200ms for all request types
+- Classification Accuracy: >95% target (currently 100%)
    - Graceful fallback if database is unavailable
 
 ## Installation Methods

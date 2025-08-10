@@ -1,0 +1,95 @@
+# Model Configuration
+# Part of Story 1.2: Request Classification Engine with Delegation Integration
+# Mac-optimized settings for embeddings and language models
+
+embedding_model:
+  # Primary model for development (full precision)
+  primary: "Qwen/Qwen3-Embedding-8B"
+  
+  # Fallback model for production/resource-constrained environments
+  fallback: "mlx-community/Qwen3-Embedding-8B-4bit-DWQ"
+  
+  # Alternative lightweight model
+  default: "all-MiniLM-L6-v2"
+  
+  # Mac-specific settings
+  mac_settings:
+    use_mlx: true  # Use MLX framework on Mac
+    batch_size: 16  # Optimized for unified memory
+    max_memory: "32GB"  # Adjust based on Mac model (8GB/16GB/32GB/64GB/128GB)
+    compute_units: "all"  # Use all available Neural Engine cores
+    use_mps: true  # Use Metal Performance Shaders
+    
+  # General settings
+  general_settings:
+    embedding_dim: 1536  # Qwen3 embedding dimension
+    max_sequence_length: 512
+    normalize_embeddings: true
+    
+# Model paths (if using local models)
+model_paths:
+  # These paths will be set by environment configuration
+  # Do not manually download models - they are pre-provisioned
+  qwen3_full: "${MODEL_PATH}/Qwen3-Embedding-8B"
+  qwen3_quantized: "${MODEL_PATH}/Qwen3-Embedding-8B-4bit-DWQ"
+  minilm: "sentence-transformers/all-MiniLM-L6-v2"  # Will download automatically
+
+# Performance optimization
+performance:
+  # Mac M-series specific optimizations
+  mac_optimizations:
+    # M1/M2/M3 Pro/Max settings
+    m_series_pro_max:
+      batch_size: 32
+      num_threads: 8
+      use_neural_engine: true
+      memory_growth: true
+      
+    # M1/M2/M3 base settings
+    m_series_base:
+      batch_size: 16
+      num_threads: 4
+      use_neural_engine: true
+      memory_growth: false
+      
+  # General optimizations
+  general:
+    cache_embeddings: true
+    cache_size_mb: 512
+    prefetch_batches: 2
+    async_processing: true
+    
+# Model selection strategy
+selection_strategy:
+  # Auto-detect best model based on system
+  auto_detect: true
+  
+  # Priority order for model selection
+  priority:
+    - check: "mlx_available"
+      model: "mlx-community/Qwen3-Embedding-8B-4bit-DWQ"
+    - check: "gpu_available"
+      model: "Qwen/Qwen3-Embedding-8B"
+    - check: "always"
+      model: "all-MiniLM-L6-v2"
+      
+# Embedding storage settings
+embedding_storage:
+  backend: "chromadb"  # or "faiss", "qdrant"
+  
+  chromadb_settings:
+    persist_directory: "./data/chroma"
+    anonymized_telemetry: false
+    allow_reset: false
+    
+  index_settings:
+    metric: "cosine"  # or "euclidean", "dot_product"
+    ef_construction: 200
+    M: 16
+    
+# Monitoring and logging
+monitoring:
+  log_performance: true
+  log_level: "INFO"
+  metrics_enabled: true
+  trace_embeddings: false
