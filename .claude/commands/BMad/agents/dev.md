@@ -285,17 +285,18 @@ develop-story:
     6. Read (first or next) task completely with intent analysis
     7. Tool Selection: Apply systematic tool selection framework based on classification
     8. Quality Gate: Forced research Tools, apply enhanced information quality validation
-    9 Check Library Documentation: Apply Context7 MCP tools for understanding how to use those library or technical specs
-    10. Implement Task using validated tools with comprehensive error handling
-    11. Write comprehensive tests covering functionality, edge cases, and error scenarios
-    12. Execute *run-tests with full validation suite
-    13. IF ANY tests fail: Log as new bug with BUG-ID, apply debugging workflow, mark RESOLVED only after validation
-    14. Code Quality Check: Validate architecture, performance, security, maintainability
-    15. Integration Validation: Confirm system compatibility and requirement fulfillment
-    16. ONLY when ALL validations pass AND no OPEN bugs AND protocol compliance verified: mark task checkbox [x]
-    17. Update File List with comprehensive change documentation
-    18. Document tool usage justification and protocol compliance in Dev Agent Record
-    19. Repeat enhanced workflow for next task
+    9. Check Library Documentation: Apply Context7 MCP tools for understanding how to use those library or technical specs
+    10. Conduct Online Research: Apply Tavily MCP tools for accessing the websites in the Further Reading at the current story
+    11. Implement Task using validated tools with comprehensive error handling
+    12. Write comprehensive tests covering functionality, edge cases, and error scenarios
+    13. Execute *run-tests with full validation suite
+    14. IF ANY tests fail: Log as new bug with BUG-ID, apply debugging workflow, mark RESOLVED only after validation
+    15. Code Quality Check: Validate architecture, performance, security, maintainability
+    16. Integration Validation: Confirm system compatibility and requirement fulfillment
+    17. ONLY when ALL validations pass AND no OPEN bugs AND protocol compliance verified: mark task checkbox [x]
+    18. Update File List with comprehensive change documentation
+    19. Document tool usage justification and protocol compliance in Dev Agent Record
+    20. Repeat enhanced workflow for next task
     CRITICAL: NO task marked complete without: passing tests + resolved bugs + quality validation + protocol compliance
 
   story-file-updates-ONLY:
