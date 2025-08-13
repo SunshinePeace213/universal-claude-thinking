@@ -1,5 +1,10 @@
 # Enhanced Sub-Agent Architecture: Context Engineering + Native Management
 
+## Implementation Status
+- **Story**: 1.3 - Enhanced Sub-Agent Architecture Framework
+- **Status**: In Development (Story document created: `docs/stories/1.3.enhanced-sub-agent-architecture-framework.story.md`)
+- **Epic**: 1 - Foundation & Cognitive Infrastructure
+
 ## Overview: Hybrid Cognitive Intelligence System
 
 The Enhanced Sub-Agent Architecture represents the evolution of the Multi-Agent Organ Architecture, combining the sophisticated Context Engineering layers (Atomic→Molecular→Cellular→Organ→Cognitive Tools→Prompt Programming) with Anthropic's native sub-agent infrastructure for simplified management and enhanced parallel processing.
@@ -229,5 +234,32 @@ Sub-Agent Contexts (Parallel):
 - **Enhanced Recursive Improvement**: Individual contexts enable deeper improvement cycles
 - **Cross-Sub-Agent Learning**: Cognitive tools can be shared and optimized across specialists
 - **Meta-Cognitive Coordination**: Sub-agents can assess and optimize their own cognitive performance
+
+## Implementation Notes (Story 1.3)
+
+### Key Implementation Requirements
+Based on Story 1.3 acceptance criteria and research findings:
+
+1. **Native Integration**: Leverage Claude Code v1.0.60+ `/agents` command for management
+2. **Context Isolation**: Each sub-agent operates in separate context window (native Claude Code feature)
+3. **Coordination Protocols**: Implement in `src/agents/` with message passing and result synthesis
+4. **Error Boundaries**: Prevent cascade failures through isolation mechanisms
+5. **Performance Monitoring**: Track utilization and coordination efficiency in `src/utils/metrics.py`
+
+### Research Insights Applied
+- **Token Efficiency**: Keep agent definitions under 3k tokens (from Agent Engineering research)
+- **Model Selection**: Use Haiku for simple tasks, Sonnet for balanced work, Opus for complex reasoning
+- **Parallel Processing**: Leverage individual context windows for true simultaneous execution
+- **Automatic Delegation**: Configure descriptions for Claude's auto-routing based on task classification
+
+### Integration Points
+- **Delegation Engine**: Connect with 3-stage system from Story 1.2
+- **Memory System**: Integrate with 5-layer architecture for context persistence
+- **Hook System**: Link with `.claude/hooks/` for enhanced functionality
+- **Context Engineering**: Preserve all cognitive capabilities within native infrastructure
+
+### Related Documents
+- **Optimized Specifications**: See `sub-agent-specifications-optimized.md` for production-ready agent definitions
+- **Original Specifications**: See `sub-agent-specifications.md` for full cognitive framework details
 
 This Enhanced Sub-Agent Architecture represents the optimal evolution of the Multi-Agent Organ Architecture, combining sophisticated Context Engineering intelligence with simplified native management and enhanced parallel processing capabilities.
