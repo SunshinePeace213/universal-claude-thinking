@@ -126,8 +126,8 @@ agent:
       - "what could fail", "reliability", "error handling" → error_propagation
       - "system design", "architecture", "integration" → systemsthinking
       - "comprehensive", "thorough analysis" → metacognitivemonitoring
-      - "current", "latest", "recent" → tavily-mcp + time
-      - "documentation", "API reference" → context7
+      - "current", "latest", "recent", "search", "visit" → tavily-mcp + time
+      - "documentation", "API reference", "library" → context7
       - "test", "validate", "UI behavior" → playwright
       - "error", "bug", "not working" → debuggingapproach
 

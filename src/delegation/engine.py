@@ -8,12 +8,20 @@ import logging
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from .confidence_scorer import ConfidenceScore, ConfidenceScorer
 from .keyword_matcher import KeywordMatcher, KeywordMatchResult
 from .pe_fallback import PEFallback, PEFallbackResult
 from .semantic_matcher import SemanticMatcher, SemanticMatchResult
+
+# Import SubAgentManager for integration
+try:
+    from ..agents.manager import SubAgentManager
+    SUB_AGENT_MANAGER_AVAILABLE = True
+except ImportError:
+    SUB_AGENT_MANAGER_AVAILABLE = False
+    SubAgentManager = None
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +33,11 @@ class DelegationResult:
     selected_agent: str
     delegation_method: str  # "keyword", "semantic", or "fallback"
     confidence_score: ConfidenceScore
-    stage_results: dict[str, Any] = field(default_factory=dict)
+    stage_results: Dict[str, Any] = field(default_factory=dict)
     total_processing_time_ms: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for storage"""
         return {
             'success': self.success,
@@ -48,7 +56,7 @@ class HybridDelegationEngine:
     Routes requests through keyword → semantic → PE fallback.
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Dict[str, Any] | None = None):
         """
         Initialize delegation engine with components.
 
@@ -65,6 +73,16 @@ class HybridDelegationEngine:
         )
         self.pe_fallback = PEFallback()
         self.confidence_scorer = ConfidenceScorer()
+
+        # Initialize SubAgentManager if available
+        self.sub_agent_manager = None
+        if SUB_AGENT_MANAGER_AVAILABLE:
+            try:
+                self.sub_agent_manager = SubAgentManager()
+                logger.info("SubAgentManager initialized for delegation engine")
+            except Exception as e:
+                logger.warning(f"Failed to initialize SubAgentManager: {e}")
+                self.sub_agent_manager = None
 
         # Performance tracking
         self.metrics = {
@@ -83,7 +101,7 @@ class HybridDelegationEngine:
 
     async def delegate(self, user_input: str,
                       classification_result: Any | None = None,
-                      context: dict[str, Any] | None = None) -> DelegationResult:
+                      context: Dict[str, Any] | None = None) -> DelegationResult:
         """
         Main delegation method using 3-stage system.
 
@@ -273,9 +291,50 @@ class HybridDelegationEngine:
                 enhancement_needed=True
             )
 
-    def get_metrics(self) -> dict[str, Any]:
+    async def execute_agent(self, agent_name: str, user_input: str,
+                           context: Dict[str, Any] | None = None) -> Dict[str, Any]:
+        """
+        Execute selected agent through SubAgentManager.
+
+        Args:
+            agent_name: Name of agent to execute
+            user_input: User's request
+            context: Additional context for agent
+
+        Returns:
+            Agent execution result
+        """
+        if not self.sub_agent_manager:
+            logger.warning("SubAgentManager not available, returning placeholder result")
+            return {
+                'agent': agent_name,
+                'status': 'unavailable',
+                'message': 'SubAgentManager not initialized'
+            }
+
+        try:
+            # Activate agent if not already active
+            if agent_name not in self.sub_agent_manager.active_agents:
+                await self.sub_agent_manager.activate_agent(agent_name)
+
+            # Execute agent with isolated context
+            result = await self.sub_agent_manager.execute_agent(
+                agent_name=agent_name,
+                input_data={'prompt': user_input, 'context': context or {}}
+            )
+
+            return result
+        except Exception as e:
+            logger.error(f"Error executing agent {agent_name}: {e}")
+            return {
+                'agent': agent_name,
+                'status': 'error',
+                'error': str(e)
+            }
+
+    def get_metrics(self) -> Dict[str, Any]:
         """Get delegation metrics"""
-        return {
+        metrics = {
             **self.metrics,
             'keyword_percentage': (
                 self.metrics['keyword_matches'] / max(self.metrics['total_delegations'], 1) * 100
@@ -287,6 +346,13 @@ class HybridDelegationEngine:
                 self.metrics['fallback_routes'] / max(self.metrics['total_delegations'], 1) * 100
             ),
         }
+
+        # Add SubAgentManager metrics if available
+        if self.sub_agent_manager:
+            agent_stats = self.sub_agent_manager.get_all_agents_stats()
+            metrics['sub_agent_stats'] = agent_stats
+
+        return metrics
 
     def get_delegation_header(self, result: DelegationResult) -> str:
         """Generate formatted delegation header for display"""
@@ -325,7 +391,7 @@ class HybridDelegationEngine:
 """
         return header
 
-    def _format_confidence_factors(self, factors: dict[str, float]) -> str:
+    def _format_confidence_factors(self, factors: Dict[str, float]) -> str:
         """Format confidence factors for display"""
         lines = []
         for factor, score in factors.items():
