@@ -3,14 +3,11 @@
 # Mac-optimized settings for embeddings and language models
 
 embedding_model:
-  # Primary model for development (full precision)
+  # Main model for embeddings (full precision)
   primary: "Qwen/Qwen3-Embedding-8B"
   
-  # Fallback model for production/resource-constrained environments
-  fallback: "mlx-community/Qwen3-Embedding-8B-4bit-DWQ"
-  
-  # Alternative lightweight model
-  default: "all-MiniLM-L6-v2"
+  # Alternative lightweight model for testing
+  fallback: "all-MiniLM-L6-v2"
   
   # Mac-specific settings
   mac_settings:
@@ -22,17 +19,16 @@ embedding_model:
     
   # General settings
   general_settings:
-    embedding_dim: 1536  # Qwen3 embedding dimension
+    embedding_dim: 4096  # Qwen3-Embedding-8B dimension
     max_sequence_length: 512
     normalize_embeddings: true
     
 # Model paths (if using local models)
 model_paths:
-  # These paths will be set by environment configuration
-  # Do not manually download models - they are pre-provisioned
-  qwen3_full: "${MODEL_PATH}/Qwen3-Embedding-8B"
-  qwen3_quantized: "${MODEL_PATH}/Qwen3-Embedding-8B-4bit-DWQ"
-  minilm: "sentence-transformers/all-MiniLM-L6-v2"  # Will download automatically
+  # Model path - pre-provisioned, do not manually download
+  qwen3: "embedding/Qwen3-Embedding-8B"
+  # Alternative for testing
+  minilm: "sentence-transformers/all-MiniLM-L6-v2"  # Will download automatically if needed
 
 # Performance optimization
 performance:
@@ -66,11 +62,9 @@ selection_strategy:
   
   # Priority order for model selection
   priority:
-    - check: "mlx_available"
-      model: "mlx-community/Qwen3-Embedding-8B-4bit-DWQ"
-    - check: "gpu_available"
-      model: "Qwen/Qwen3-Embedding-8B"
-    - check: "always"
+    - check: "model_available"
+      model: "Qwen3-Embedding-8B"
+    - check: "fallback"
       model: "all-MiniLM-L6-v2"
       
 # Embedding storage settings

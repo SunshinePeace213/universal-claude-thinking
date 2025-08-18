@@ -18,7 +18,7 @@ import pytest
 from src.core.molecular.context_builder import MoleculeContextBuilder
 from src.core.molecular.example_selector import ExampleSelector, SelectionStrategy
 from src.core.molecular.vector_store import VectorStore, VectorSearchResult
-from src.rag.embedder import AdaptiveEmbedder, ModelType
+from src.rag.embedder import Qwen8BEmbedder, ModelType
 from src.rag.pipeline import RAGPipeline, PipelineConfig, PipelineMode
 from src.rag.benchmarks.model_benchmark import ModelBenchmark
 
@@ -26,6 +26,7 @@ from src.rag.benchmarks.model_benchmark import ModelBenchmark
 class TestPerformanceBenchmarks(unittest.TestCase):
     """Performance validation tests for all acceptance criteria."""
     
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_context_construction_latency(self):
         """Test context construction meets <800ms requirement (AC 6)."""
@@ -79,6 +80,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         self.assertLess(avg_latency, 500, "Average latency should be well under 800ms")
         self.assertLess(p95_latency, 800, "95th percentile should be under 800ms")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_similarity_search_latency(self):
         """Test similarity search meets <100ms requirement (AC 8)."""
@@ -151,6 +153,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         self.assertLess(avg_latency, 50, "Average search should be well under 100ms")
         self.assertLess(p95_latency, 100, "95th percentile should be under 100ms")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_batch_processing_capacity(self):
         """Test batch processing up to 32 examples (AC 7)."""
@@ -213,6 +216,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         large_time_ms = (end - start) * 1000
         print(f"Batch processing 100 items - Total: {large_time_ms:.2f}ms")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_end_to_end_pipeline_latency(self):
         """Test complete pipeline meets <800ms total latency (AC 6)."""
@@ -288,6 +292,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         
         self.assertLess(avg_latency, 850, "Average should be close to target")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_4096_dimensional_performance(self):
         """Test performance with 4096-dimensional embeddings (AC 3)."""
@@ -322,6 +327,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         # Should be fast even with 4096 dimensions
         self.assertLess(per_calc_us, 100, "Each similarity calculation should be fast")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_chunk_overlap_performance(self):
         """Test performance with 15% chunk overlap (AC 4)."""
@@ -362,6 +368,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         expected_overlap = int(1024 * 0.15)
         self.assertEqual(builder.overlap_tokens, expected_overlap)
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_effectiveness_update_performance(self):
         """Test performance of effectiveness score updates (AC 5)."""
@@ -388,6 +395,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         # Updates should be fast
         self.assertLess(avg_update_time, 10, "Updates should be fast")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_cache_performance(self):
         """Test caching improves performance."""
@@ -435,6 +443,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
         # Cache hit should be recorded
         self.assertEqual(result2.cache_hits, 1)
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     async def test_memory_usage_limits(self):
         """Test memory usage stays within limits (AC 10)."""
@@ -474,6 +483,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
 class TestScalabilityBenchmarks(unittest.TestCase):
     """Test scalability with larger workloads."""
     
+    @pytest.mark.asyncio
     @pytest.mark.performance
     @pytest.mark.slow
     async def test_large_vector_store_performance(self):
@@ -520,6 +530,7 @@ class TestScalabilityBenchmarks(unittest.TestCase):
         # Should still meet <100ms requirement
         self.assertLess(avg_latency, 100, "Search should be fast even with 1000+ vectors")
         
+    @pytest.mark.asyncio
     @pytest.mark.performance
     @pytest.mark.slow
     async def test_concurrent_request_handling(self):

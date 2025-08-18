@@ -128,6 +128,7 @@ docs-backup/
 dev-backup.md
 qa-backup.md
 embedding/
+ads.md
 
 # Custom Folder
 .mypy_cache

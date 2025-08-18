@@ -25,7 +25,7 @@ from src.core.molecular.example_selector import (
     SelectionStrategy,
 )
 from src.core.molecular.vector_store import VectorStore
-from src.rag.embedder import AdaptiveEmbedder, ModelType
+from src.rag.embedder import Qwen8BEmbedder, ModelType
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class PipelineResult:
     embeddings_generated: int
     total_latency_ms: float
     breakdown: Dict[str, float]  # Timing breakdown
-    model_used: ModelType
+    model_used: ModelType = ModelType.QWEN3_8B
     cache_hits: int = 0
     warnings: List[str] = None
 
@@ -78,7 +78,7 @@ class RAGPipeline:
     def __init__(
         self,
         vector_store: VectorStore,
-        embedder: Optional[AdaptiveEmbedder] = None,
+        embedder: Optional[Qwen8BEmbedder] = None,
         config: Optional[PipelineConfig] = None,
     ) -> None:
         """
@@ -86,11 +86,11 @@ class RAGPipeline:
         
         Args:
             vector_store: Vector storage backend
-            embedder: Adaptive embedder (creates default if None)
+            embedder: Qwen3 embedder (creates default if None)
             config: Pipeline configuration
         """
         self.vector_store = vector_store
-        self.embedder = embedder or AdaptiveEmbedder()
+        self.embedder = embedder or Qwen8BEmbedder()
         self.config = config or PipelineConfig()
         
         # Initialize components
@@ -238,7 +238,7 @@ class RAGPipeline:
                 embeddings_generated=1,
                 total_latency_ms=total_latency,
                 breakdown=timings,
-                model_used=self.embedder.active_embedder.model_type,
+                model_used=ModelType.QWEN3_8B,
                 cache_hits=0,
                 warnings=warnings if warnings else None,
             )
@@ -323,7 +323,7 @@ class RAGPipeline:
                     embeddings_generated=1,
                     total_latency_ms=0,  # Not tracked for batch
                     breakdown={},
-                    model_used=self.embedder.active_embedder.model_type,
+                    model_used=ModelType.QWEN3_8B,
                 )
                 
                 results.append(result)
@@ -387,7 +387,7 @@ class RAGPipeline:
         
         # Add model info
         model_info = {
-            "active_model": self.embedder.active_embedder.model_type.value if self.embedder.active_embedder else None,
+            "active_model": ModelType.QWEN3_8B.value,
             "batch_size": self.config.batch_size,
         }
         
@@ -431,17 +431,11 @@ class RAGPipeline:
         if avg_total > self.config.target_latency_ms:
             logger.info(f"Average latency {avg_total:.2f}ms exceeds target, optimizing...")
             
-            # Try switching to 4bit model if using 8B
-            if self.embedder.active_embedder.model_type == ModelType.QWEN3_8B:
-                logger.info("Switching to 4bit model for better latency")
-                if not self.embedder.fallback_embedder:
-                    from src.rag.embedder import Qwen8B4BitEmbedder
-                    self.embedder.fallback_embedder = Qwen8B4BitEmbedder()
-                    await self.embedder.fallback_embedder.initialize()
-                self.embedder.active_embedder = self.embedder.fallback_embedder
+            # Log warning but continue with current model
+            logger.warning(f"Latency {avg_total:.0f}ms exceeds target {self.config.target_latency_ms}ms")
                 
             # Reduce batch size
-            elif self.config.batch_size > 16:
+            if self.config.batch_size > 16:
                 self.config.batch_size = max(16, self.config.batch_size // 2)
                 logger.info(f"Reduced batch size to {self.config.batch_size}")
                 

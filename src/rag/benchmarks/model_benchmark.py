@@ -21,7 +21,7 @@ import psutil
 import torch
 from memory_profiler import memory_usage
 
-from src.rag.embedder import ModelType, Qwen8B4BitEmbedder, Qwen8BEmbedder
+from src.rag.embedder import ModelType, Qwen8BEmbedder
 
 logger = logging.getLogger(__name__)
 
@@ -166,10 +166,8 @@ class ModelBenchmark:
         logger.info(f"Benchmarking {model_type.value}...")
         
         # Initialize model
-        if model_type == ModelType.QWEN3_8B:
-            model = Qwen8BEmbedder(model_path=model_path)
-        else:
-            model = Qwen8B4BitEmbedder(model_path=model_path)
+        # Only support Qwen3_8B model
+        model = Qwen8BEmbedder(model_path=model_path)
             
         try:
             await model.initialize()
@@ -457,7 +455,7 @@ class ModelBenchmark:
         await self.initialize()
         
         # Benchmark each model
-        model_types = [ModelType.QWEN3_8B, ModelType.QWEN3_8B_4BIT]
+        model_types = [ModelType.QWEN3_8B]
         
         for model_type in model_types:
             model_path = model_paths.get(model_type) if model_paths else None
@@ -532,42 +530,32 @@ class ModelBenchmark:
             return ["No benchmark data available for recommendations"]
             
         # Compare models if both tested
-        if len(summary) >= 2:
+        # Performance analysis for single model
+        if len(summary) >= 1:
             model_8b = ModelType.QWEN3_8B.value
-            model_4bit = ModelType.QWEN3_8B_4BIT.value
             
-            # Latency comparison
-            if "latency" in summary.get(model_8b, {}) and "latency" in summary.get(model_4bit, {}):
-                latency_8b = summary[model_8b]["latency"]["mean"]
-                latency_4bit = summary[model_4bit]["latency"]["mean"]
-                
-                if latency_4bit < latency_8b * 0.7:
+            if "latency" in summary.get(model_8b, {}):
+                latency = summary[model_8b]["latency"]["mean"]
+                if latency < 800:
                     recommendations.append(
-                        f"Use {model_4bit} for latency-critical applications "
-                        f"({latency_4bit:.2f}ms vs {latency_8b:.2f}ms)"
+                        f"Model meets latency target ({latency:.2f}ms < 800ms)"
+                    )
+                else:
+                    recommendations.append(
+                        f"Consider optimization: latency {latency:.2f}ms exceeds 800ms target"
                     )
                     
-            # Memory comparison
-            if "memory_usage" in summary.get(model_8b, {}) and "memory_usage" in summary.get(model_4bit, {}):
-                memory_8b = summary[model_8b]["memory_usage"]["mean"]
-                memory_4bit = summary[model_4bit]["memory_usage"]["mean"]
-                
-                if memory_4bit < memory_8b * 0.5:
-                    recommendations.append(
-                        f"Use {model_4bit} for memory-constrained environments "
-                        f"({memory_4bit:.2f}GB vs {memory_8b:.2f}GB)"
-                    )
+            if "memory_usage" in summary.get(model_8b, {}):
+                memory = summary[model_8b]["memory_usage"]["mean"]
+                recommendations.append(
+                    f"Memory usage: {memory:.2f}GB"
+                )
                     
-            # Quality comparison
-            if "embedding_quality" in summary.get(model_8b, {}) and "embedding_quality" in summary.get(model_4bit, {}):
-                quality_8b = summary[model_8b]["embedding_quality"]["mean"]
-                quality_4bit = summary[model_4bit]["embedding_quality"]["mean"]
-                
-                if quality_8b > quality_4bit * 1.05:  # 5% better triggers recommendation
-                    recommendations.append(
-                        f"Use {model_8b} when embedding quality is critical "
-                        f"({quality_8b:.3f} vs {quality_4bit:.3f})"
-                    )
+            if "embedding_quality" in summary.get(model_8b, {}):
+                quality = summary[model_8b]["embedding_quality"]["mean"]
+                recommendations.append(
+                    f"Embedding quality score: {quality:.3f}"
+                )
                     
         # General recommendations
         for model, metrics in summary.items():

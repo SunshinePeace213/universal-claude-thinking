@@ -10,11 +10,10 @@ This module provides components for the hybrid RAG pipeline including:
 
 __all__ = [
     "QwenEmbedder",
-    "Qwen8BEmbedder", 
-    "Qwen8B4BitEmbedder",
+    "Qwen8BEmbedder",
 ]
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .embedder import QwenEmbedder, Qwen8BEmbedder, Qwen8B4BitEmbedder
+    from .embedder import QwenEmbedder, Qwen8BEmbedder

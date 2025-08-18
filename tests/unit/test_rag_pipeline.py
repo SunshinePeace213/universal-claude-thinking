@@ -106,8 +106,7 @@ class TestRAGPipeline(unittest.TestCase):
         # Mock embedding generation
         embedding = np.random.randn(4096).astype(np.float32)
         self.embedder.generate_embedding.return_value = embedding
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Mock example selection
         examples = [
@@ -183,8 +182,7 @@ class TestRAGPipeline(unittest.TestCase):
         # Setup mocks
         embedding = np.random.randn(4096).astype(np.float32)
         self.embedder.generate_embedding.return_value = embedding
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Mock selection result
         selection_result = SelectionResult(
@@ -226,8 +224,7 @@ class TestRAGPipeline(unittest.TestCase):
             return np.random.randn(4096).astype(np.float32)
             
         self.embedder.generate_embedding = slow_embedding
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Fast selection to isolate embedding latency
         selection_result = SelectionResult(
@@ -264,8 +261,7 @@ class TestRAGPipeline(unittest.TestCase):
         # Wrong dimension embedding
         wrong_dim_embedding = np.random.randn(2048).astype(np.float32)
         self.embedder.generate_embedding.return_value = wrong_dim_embedding
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         selection_result = SelectionResult(
             examples=[],
@@ -317,8 +313,7 @@ class TestRAGPipeline(unittest.TestCase):
             return result
             
         self.embedder.generate_embedding = batch_embed
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Mock selection
         selection_result = SelectionResult(
@@ -414,8 +409,7 @@ class TestRAGPipeline(unittest.TestCase):
             "key2": MagicMock(cache_hits=1),
         }
         
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         metrics = self.pipeline.get_performance_metrics()
         
@@ -453,21 +447,13 @@ class TestRAGPipeline(unittest.TestCase):
             {"total": 1000.0} for _ in range(15)  # All exceed 800ms target
         ]
         
-        # Setup embedder for model switching
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B
-        self.embedder.fallback_embedder = None
+        # Setup embedder with single model
+        self.embedder.model_type = ModelType.QWEN3_8B
         
-        with patch('src.rag.pipeline.Qwen8B4BitEmbedder') as mock_4bit:
-            mock_4bit_instance = AsyncMock()
-            mock_4bit.return_value = mock_4bit_instance
-            
-            await self.pipeline.optimize_for_latency()
-            
-            # Should create and switch to 4bit model
-            mock_4bit.assert_called_once()
-            mock_4bit_instance.initialize.assert_called_once()
-            self.assertEqual(self.pipeline.embedder.active_embedder, mock_4bit_instance)
+        await self.pipeline.optimize_for_latency()
+        
+        # Should keep using same model
+        self.assertEqual(self.embedder.model_type, ModelType.QWEN3_8B)
             
     async def test_optimize_reduce_batch_size(self):
         """Test optimization by reducing batch size."""
@@ -476,10 +462,8 @@ class TestRAGPipeline(unittest.TestCase):
             {"total": 900.0} for _ in range(15)
         ]
         
-        # Setup embedder already using 4bit
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B_4BIT
-        self.embedder.fallback_embedder = MagicMock()
+        # Setup embedder with single model
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Start with large batch size
         self.pipeline.config.batch_size = 32
@@ -496,9 +480,8 @@ class TestRAGPipeline(unittest.TestCase):
             {"total": 900.0} for _ in range(15)
         ]
         
-        # Setup embedder already using 4bit
-        self.embedder.active_embedder = MagicMock()
-        self.embedder.active_embedder.model_type = ModelType.QWEN3_8B_4BIT
+        # Setup embedder with single model
+        self.embedder.model_type = ModelType.QWEN3_8B
         
         # Already reduced batch size
         self.pipeline.config.batch_size = 8
@@ -555,8 +538,7 @@ class TestPipelinePerformance(unittest.TestCase):
             return np.random.randn(4096).astype(np.float32)
             
         embedder.generate_embedding = fast_embed
-        embedder.active_embedder = MagicMock()
-        embedder.active_embedder.model_type = ModelType.QWEN3_8B_4BIT
+        embedder.model_type = ModelType.QWEN3_8B
         
         # Mock fast selection
         async def fast_select(*args, **kwargs):
@@ -607,8 +589,7 @@ class TestPipelinePerformance(unittest.TestCase):
         # Mock batch embedding that handles 32 items
         batch_embeddings = np.random.randn(32, 4096).astype(np.float32)
         embedder.generate_embedding.return_value = batch_embeddings
-        embedder.active_embedder = MagicMock()
-        embedder.active_embedder.model_type = ModelType.QWEN3_8B
+        embedder.model_type = ModelType.QWEN3_8B
         
         # Mock selection
         selection_result = SelectionResult(
