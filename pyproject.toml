@@ -25,6 +25,21 @@ dependencies = [
     
     # Vector storage
     "chromadb>=1.0.15",
+    "sqlite-vec>=0.1.6",  # Critical for sqlite vector operations
+    
+    # Data processing & analysis
+    "pandas>=2.3.1",
+    "numpy>=2.3.2",
+    
+    # NLP
+    "spacy>=3.8.7",
+    
+    # Monitoring & profiling
+    "memory-profiler>=0.61.0",
+    "psutil>=7.0.0",
+    
+    # Scheduling
+    "apscheduler>=3.11.0",
 ]
 
 [project.optional-dependencies]
@@ -35,12 +50,17 @@ dev = [
     "pytest-cov>=6.0.0",
     "pytest-xdist>=3.6.1",
     "pytest-mock>=3.14.0",
+    "pytest-benchmark>=5.1.0",  # Performance testing
     
     # Development tools
     "black>=24.10.0",
     "ruff>=0.8.4",
     "mypy>=1.14.0",
     "pre-commit>=4.0.1",
+    
+    # Visualization (for development/debugging)
+    "matplotlib>=3.10.5",
+    "seaborn>=0.13.2",
 ]
 
 [build-system]
