@@ -1,0 +1,84 @@
+# Memory System Configuration
+# Defines parameters for the 5-layer memory architecture
+
+memory:
+  # Short-Term Memory (STM) Configuration
+  stm:
+    ttl_hours: 2
+    cache_size: 1000
+    max_memories: 500
+    
+  # Working Memory (WM) Configuration  
+  wm:
+    ttl_days: 7
+    promotion_threshold: 5.0
+    max_memories: 2000
+    
+  # Long-Term Memory (LTM) Configuration
+  ltm:
+    promotion_score: 8.0
+    promotion_uses: 5
+    max_memories: 10000
+    
+  # SWARM Community Memory Configuration
+  swarm:
+    enabled: false  # Will be implemented in Epic 6
+    anonymization_required: true
+    
+  # Privacy Engine Configuration
+  privacy:
+    pii_detection: true
+    anonymization: true
+    pii_patterns:
+      - email
+      - phone
+      - ssn
+      - credit_card
+      - address
+      - name
+      - date_of_birth
+      - medical_info
+    spacy_model: "en_core_web_lg"
+    
+  # Promotion Pipeline Configuration
+  promotion:
+    stm_check_interval: 3600  # 1 hour in seconds
+    wm_check_interval: 86400  # 1 day in seconds
+    batch_size: 100
+    
+  # Effectiveness Scoring Configuration
+  scoring:
+    default_score: 5.0
+    positive_adjustment: 0.3
+    negative_adjustment: -0.3
+    min_score: 0.0
+    max_score: 10.0
+    decay_rate: 0.01  # Daily decay for unused memories
+    usage_boost: 0.1  # Boost per usage
+    
+  # Storage Configuration
+  storage:
+    database_path: "data/memories/thinking_v2.db"
+    connection_pool_size: 10
+    cache_ttl_seconds: 300
+    batch_insert_size: 100
+    
+  # Embedding Configuration
+  embedding:
+    model_path: "embedding/Qwen3-Embedding-8B"
+    dimension: 4096
+    batch_size: 32
+    cache_size: 1000
+    normalize_embeddings: true
+    use_mps: true  # Use Mac M3 MPS acceleration
+    instruction_prefixes:
+      stm: "Recent interaction: "
+      wm: "Working context: "
+      ltm: "User preference: "
+      swarm: "Community pattern: "
+    
+  # Performance Requirements
+  performance:
+    max_retrieval_latency_ms: 100
+    max_promotion_latency_ms: 500
+    max_pii_detection_latency_ms: 50
