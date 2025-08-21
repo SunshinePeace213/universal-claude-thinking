@@ -40,6 +40,15 @@ dependencies = [
     
     # Scheduling
     "apscheduler>=3.11.0",
+    
+    # Display & Terminal UI
+    "rich>=13.9.0",  # Terminal formatting, tables, progress bars
+    
+    # Validation
+    "jsonschema>=4.23.0",  # Status message schema validation
+    
+    # File monitoring
+    "watchdog>=6.0.0",  # Configuration file change detection
 ]
 
 [project.optional-dependencies]
