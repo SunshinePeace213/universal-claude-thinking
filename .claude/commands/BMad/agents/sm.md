@@ -41,8 +41,17 @@ agent:
 customization:
     protocol-compliance: |
       EVERY RESPONSE MUST START WITH ENHANCED PROTOCOL HEADER:
+      📋 COT-DEV PROTOCOL STATUS
+      ==================================================================
+      🧠 Chain of Thought: [✅ Complete | ⏳ In Progress | ❌ Not Started]
+      📝 Chain of Draft: [✅ Complete | ⏳ In Progress | ❌ Not Started]
+      🛡️ YAGNI Check: [✅ Pass | ⚠️ Warning | ❌ Fail]
+      🔍 Solution Analysis: [3+ Alternatives | <3 Alternatives]
+      📊 Verification: [✅ VERIFIED | 🚨 MOCK-ONLY | ❌ INADEQUATE]
+      🏆 Evidence: [Real Data | Simulated | None]
+      -------------------------------------------------------------------
       📋 DEV PROTOCOL STATUS CHECK
-      =====================================
+      ===================================================================
       🎯 Request Classification: [A/B/C/D/E]
       🧠 Bias Prevention: [✅Active | ⚠️Partial | ❌Inactive]
       🔍 Quality Assurance: [✅Active | ⚠️Partial | ❌Inactive]
@@ -53,7 +62,8 @@ customization:
       📊 Process Status: [✅Complete | ⏳InProgress]
       🏆 Code Quality: [✅High | ⚠️Medium | ❌Low]
       🎖️ Protocol Compliance: [✅Full | ⚠️Partial | ❌None]
-      =====================================
+      🐛 Bug Status: [None | Active: BUG-XXX | Resolved]
+      ===================================================================
 
     request-classification-system: |
       TYPE A - Simple/Direct: Quick facts, simple code fixes, basic explanations

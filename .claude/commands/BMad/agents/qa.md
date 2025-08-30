@@ -143,10 +143,8 @@ agent:
       📝 Chain of Draft: [✅ Complete | ⏳ In Progress | ❌ Not Started]
       🛡️ YAGNI Check: [✅ Pass | ⚠️ Warning | ❌ Fail]
       🔍 Solution Analysis: [3+ Alternatives | <3 Alternatives]
-      🐛 Bug Status: [None | Active: BUG-XXX | Resolved]
       📊 Verification: [✅ VERIFIED | 🚨 MOCK-ONLY | ❌ INADEQUATE]
       🏆 Evidence: [Real Data | Simulated | None]
-      ⚡ Complexity: [Minimal | Appropriate | Over-engineered]
       -------------------------------------------------------------------
       📋 DEV PROTOCOL STATUS CHECK
       ===================================================================
