@@ -214,84 +214,83 @@ agent:
 
     tool-selection-framework: |
       AVAILABLE DEVELOPMENT TOOLS:
-
       🧠 REASONING TOOLS (Clear-Thought) WITH MULTIPLE Tools Usage:
-      - mentalmodel: Apply structured mental models to analyze problems systematically and gain deeper insights.
-        - first_principles: Break down to fundamental truths (MANDATORY for Type B)
-        - opportunity_cost: Trade-off analysis and resource allocation decisions
-        - error_propagation: System reliability and failure mode analysis
-        - rubber_duck: Explain the problem step-by-step to clarify thinking
-        - pareto_principle: Identify the 20% of causes creating 80% of effects
-        - occams_razor: Choose the simplest explanation that fits the facts
-        - WHEN APPLY mentalmodel: Initial problem understanding, breaking down complex systems, analyzing trade-offs 
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH mentalmodel: Sequential Thinking, Decision Framework, Scientific Method
+        - mentalmodel: Apply structured mental models to analyze problems systematically and gain deeper insights.
+          - first_principles: Break down to fundamental truths (MANDATORY for Type B)
+          - opportunity_cost: Trade-off analysis and resource allocation decisions
+          - error_propagation: System reliability and failure mode analysis
+          - rubber_duck: Explain the problem step-by-step to clarify thinking
+          - pareto_principle: Identify the 20% of causes creating 80% of effects
+          - occams_razor: Choose the simplest explanation that fits the facts
+          - WHEN APPLY mentalmodel: Initial problem understanding, breaking down complex systems, analyzing trade-offs 
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH mentalmodel: Sequential Thinking, Decision Framework, Scientific Method
 
-      - creativethinking: Engage in creative and lateral thinking to generate innovative solutions and break through conventional thinking patterns.
-        - WHEN APPLY creativethinking: Collaborative Reasoning, Mental Models, Decision Framework
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH creativethinking: Collaborative Reasoning, Mental Models, Decision Framework
+        - creativethinking: Engage in creative and lateral thinking to generate innovative solutions and break through conventional thinking patterns.
+          - WHEN APPLY creativethinking: Collaborative Reasoning, Mental Models, Decision Framework
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH creativethinking: Collaborative Reasoning, Mental Models, Decision Framework
 
-      - systemsthinking: Analyze complex systems by understanding components, relationships, feedback loops, and emergent behaviors with following examples
-        - Understanding complex organizational/technical systems, 
-        - identifying root causes in multi-component systems
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH systemsthinking: Mental Models, Collaborative Reasoning, Decision Framework
+        - systemsthinking: Analyze complex systems by understanding components, relationships, feedback loops, and emergent behaviors with following examples
+          - Understanding complex organizational/technical systems, 
+          - identifying root causes in multi-component systems
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH systemsthinking: Mental Models, Collaborative Reasoning, Decision Framework
 
-      - debuggingapproach: systematic debugging methodologies to identify, isolate, and resolve complex issues efficiently (MANDATORY for Type E)
-        - binary_search: Systematically narrow down problem space
-        - reverse_engineering: Work backwards from symptoms
-        - divide_conquer: Break complex problems into manageable pieces
-        - backtracking: Retrace steps to find where problems were introduced
-        - cause_elimination: Systematically rule out potential causes
-        - program_slicing: Focus on specific code paths relevant to the issue
-        - WHEN APPLY debuggingapproach: Troubleshooting production issues, performance optimization, integration problems
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH debuggingapproach: Scientific Method, Sequential Thinking, Mental Models
+        - debuggingapproach: systematic debugging methodologies to identify, isolate, and resolve complex issues efficiently (MANDATORY for Type E)
+          - binary_search: Systematically narrow down problem space
+          - reverse_engineering: Work backwards from symptoms
+          - divide_conquer: Break complex problems into manageable pieces
+          - backtracking: Retrace steps to find where problems were introduced
+          - cause_elimination: Systematically rule out potential causes
+          - program_slicing: Focus on specific code paths relevant to the issue
+          - WHEN APPLY debuggingapproach: Troubleshooting production issues, performance optimization, integration problems
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH debuggingapproach: Scientific Method, Sequential Thinking, Mental Models
 
-      - scientificmethod: Apply systematic, evidence-based investigation and hypothesis testing.
-        - Investigating system behavior, testing causal relationships, validating assumptions
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH scientificmethod: Debugging Approach, Sequential Thinking, Decision Framework
+        - scientificmethod: Apply systematic, evidence-based investigation and hypothesis testing.
+          - Investigating system behavior, testing causal relationships, validating assumptions
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH scientificmethod: Debugging Approach, Sequential Thinking, Decision Framework
 
-      - metacognitivemonitoring: Apply systematic, evidence-based investigation and hypothesis testing (MANDATORY for Bias-Detections)
-        - Investigating system behavior, testing causal relationships, validating assumptions
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH metacognitivemonitoring: Decision Framework, Scientific Method, Sequential Thinking
-      - decisionframework: Apply structured decision-making frameworks for rational choice between alternatives with systematic evaluation.
-        - Choosing between multiple alternatives, technology selection, resource allocation 
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH decisionframework: Mental Models, Collaborative Reasoning, Scientific Method
+        - metacognitivemonitoring: Apply systematic, evidence-based investigation and hypothesis testing (MANDATORY for Bias-Detections)
+          - Investigating system behavior, testing causal relationships, validating assumptions
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH metacognitivemonitoring: Decision Framework, Scientific Method, Sequential Thinking
+        - decisionframework: Apply structured decision-making frameworks for rational choice between alternatives with systematic evaluation.
+          - Choosing between multiple alternatives, technology selection, resource allocation 
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH decisionframework: Mental Models, Collaborative Reasoning, Scientific Method
 
-      - socraticmethod: Guide inquiry through systematic Socratic questioning to deepen understanding and challenge assumptions.
-        - Examining beliefs critically, deepening understanding, challenging reasoning
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH socraticmethod: Mental Models, Structured Argumentation, Metacognitive Monitoring
-      - structuredargumentation: Construct and analyze formal logical arguments with clear premises, reasoning chains, and evidence-based conclusions.
-        - Building persuasive cases, analyzing logical structure, evaluating competing position
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH structuredargumentation: Socratic Method, Decision Framework, Scientific Method
-      - sequentialthinking: Process complex problems through structured sequential reasoning with branching, revision, and memory management. (MANDATORY for complex tasks)
-        - Complex multi-step problem-solving, planning major features, analyzing system-wide changes 
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH sequentialthinking: Mental Models, Decision Framework, Scientific Method
-      - programmingparadigm: Apply programming paradigms to select optimal coding approaches and solve problems using paradigm-specific thinking.
-        - Objective: Object-Oriented, Functional, Procedural, Reactive, Declarative, Concurrent
-        - Selecting coding approaches, understanding language strengths, optimizing for specific problem types
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH programmingparadigm: Design Patterns, Decision Framework, Mental Models
+        - socraticmethod: Guide inquiry through systematic Socratic questioning to deepen understanding and challenge assumptions.
+          - Examining beliefs critically, deepening understanding, challenging reasoning
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH socraticmethod: Mental Models, Structured Argumentation, Metacognitive Monitoring
+        - structuredargumentation: Construct and analyze formal logical arguments with clear premises, reasoning chains, and evidence-based conclusions.
+          - Building persuasive cases, analyzing logical structure, evaluating competing position
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH structuredargumentation: Socratic Method, Decision Framework, Scientific Method
+        - sequentialthinking: Process complex problems through structured sequential reasoning with branching, revision, and memory management. (MANDATORY for complex tasks)
+          - Complex multi-step problem-solving, planning major features, analyzing system-wide changes 
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH sequentialthinking: Mental Models, Decision Framework, Scientific Method
+        - programmingparadigm: Apply programming paradigms to select optimal coding approaches and solve problems using paradigm-specific thinking.
+          - Objective: Object-Oriented, Functional, Procedural, Reactive, Declarative, Concurrent
+          - Selecting coding approaches, understanding language strengths, optimizing for specific problem types
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH programmingparadigm: Design Patterns, Decision Framework, Mental Models
 
-      - stochasticalgorithm: Apply stochastic algorithms to solve decision-making problems involving uncertainty, probability, and sequential choices. Enhanced with scenario generation, sensitivity analysis, and comprehensive uncertainty quantification.
-        - mdp: Markov Decision Processes for sequential decision-making
-        - mcts: Monte Carlo Tree Search for game-like decision problems
-        - bandit: Multi-armed bandit algorithms for exploration vs exploitation
-        - bayesian: Bayesian inference for learning under uncertainty
-        - hmm: Hidden Markov Models for sequential data with hidden states
-      ENHANCED FEATURES
-        - Scenario Generation: Optimistic, pessimistic, most-likely, and black swan scenarios
-        - Sensitivity Analysis: Parameter importance ranking with confidence intervals
-        - Uncertainty Quantification: Comprehensive metrics including confidence intervals and percentiles
-        - Multiple Output Formats: Detailed, summary, and visual formats for different use cases
-        - When APPLY stochasticalgorithm: Decision-making under uncertainty, optimization with random elements, learning from incomplete data, risk assessment, scenario planning
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH stochasticalgorithm: Decision Framework, Scientific Method, Systems Thinking
+        - stochasticalgorithm: Apply stochastic algorithms to solve decision-making problems involving uncertainty, probability, and sequential choices. Enhanced with scenario generation, sensitivity analysis, and comprehensive uncertainty quantification.
+          - mdp: Markov Decision Processes for sequential decision-making
+          - mcts: Monte Carlo Tree Search for game-like decision problems
+          - bandit: Multi-armed bandit algorithms for exploration vs exploitation
+          - bayesian: Bayesian inference for learning under uncertainty
+          - hmm: Hidden Markov Models for sequential data with hidden states
+        ENHANCED FEATURES
+          - Scenario Generation: Optimistic, pessimistic, most-likely, and black swan scenarios
+          - Sensitivity Analysis: Parameter importance ranking with confidence intervals
+          - Uncertainty Quantification: Comprehensive metrics including confidence intervals and percentiles
+          - Multiple Output Formats: Detailed, summary, and visual formats for different use cases
+          - When APPLY stochasticalgorithm: Decision-making under uncertainty, optimization with random elements, learning from incomplete data, risk assessment, scenario planning
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH stochasticalgorithm: Decision Framework, Scientific Method, Systems Thinking
 
-      visualreasoning: Process visual reasoning through diagrammatic representation, spatial analysis, and visual problem-solving techniques.
-      - TYPE: Flowchart, network, hierarchy, timeline, spatial, conceptual
-      - WHEN APPLY visualreasoning: Spatial problem-solving, conceptual mapping, pattern recognition, system visualization
-      - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH visualreasoning: Spatial problem-solving, conceptual mapping, pattern recognition, system visualization
+        - visualreasoning: Process visual reasoning through diagrammatic representation, spatial analysis, and visual problem-solving techniques.
+          - TYPE: Flowchart, network, hierarchy, timeline, spatial, conceptual
+          - WHEN APPLY visualreasoning: Spatial problem-solving, conceptual mapping, pattern recognition, system visualization
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH visualreasoning: Spatial problem-solving, conceptual mapping, pattern recognition, system visualization
 
-      collaborativereasoning: Facilitate multi-perspective collaborative reasoning by simulating diverse expert viewpoints and structured group analysis.
-        - Complex multi-faceted problems, high-stakes decisions, innovation requiring diverse perspectives
-        - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH collaborativereasoning: Decision Framework, Mental Models, Systems Thinking
+        - collaborativereasoning: Facilitate multi-perspective collaborative reasoning by simulating diverse expert viewpoints and structured group analysis.
+          - Complex multi-faceted problems, high-stakes decisions, innovation requiring diverse perspectives
+          - BEST PRACTICE OR PATTERN OR COMBINE WELL WITH collaborativereasoning: Decision Framework, Mental Models, Systems Thinking
 
       🔍 RESEARCH TOOLS:
       - tavily-mcp: Current web information, trends, best practices, recent developments
