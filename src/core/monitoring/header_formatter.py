@@ -11,6 +11,7 @@ from collections import deque
 import logging
 
 from src.core.monitoring.event_bus import EventBus
+from src.core.monitoring.message_schemas import EventType
 from src.core.monitoring.display_adapters import (
     BaseAdapter,
     TerminalAdapter,
@@ -76,11 +77,11 @@ class HeaderFormatter:
     async def _subscribe_to_events(self):
         """Subscribe to relevant EventBus events."""
         try:
-            # Subscribe to various event types
-            await self._event_bus.subscribe('StatusUpdate', self.handle_event)
-            await self._event_bus.subscribe('LayerActivated', self.handle_event)
-            await self._event_bus.subscribe('AgentStatusChanged', self.handle_event)
-            await self._event_bus.subscribe('MemoryEvent', self.handle_event)
+            # Subscribe to various event types using EventType enum
+            await self._event_bus.subscribe(EventType.STATUS_UPDATE, self.handle_event)
+            await self._event_bus.subscribe(EventType.LAYER_UPDATE, self.handle_event)
+            await self._event_bus.subscribe(EventType.AGENT_UPDATE, self.handle_event)
+            await self._event_bus.subscribe(EventType.MEMORY_UPDATE, self.handle_event)
             logger.info("HeaderFormatter subscribed to EventBus")
         except Exception as e:
             logger.error(f"Failed to subscribe to EventBus: {e}")
@@ -98,14 +99,17 @@ class HeaderFormatter:
                     current_time = time.time()
                     time_since_last = current_time - self._last_update_time
                     
-                    # Enforce rate limiting
+                    # Enforce rate limiting with strict timing
                     if time_since_last < self._min_update_interval:
-                        await asyncio.sleep(self._min_update_interval - time_since_last)
+                        sleep_time = self._min_update_interval - time_since_last
+                        await asyncio.sleep(sleep_time)
+                        # Update time after sleep to ensure accurate interval
+                        current_time = time.time()
                     
                     # Process event
                     event = self._event_queue.popleft()
                     await self._process_update(self._extract_data(event))
-                    self._last_update_time = time.time()
+                    self._last_update_time = current_time
                 else:
                     # No events, sleep briefly
                     await asyncio.sleep(0.01)
@@ -115,10 +119,14 @@ class HeaderFormatter:
     
     def _extract_data(self, event: Any) -> Dict[str, Any]:
         """Extract data from event for formatting."""
-        if hasattr(event, 'data'):
+        # Handle StatusUpdateEvent objects
+        if hasattr(event, 'to_dict'):
+            event_dict = event.to_dict()
+            return event_dict.get('data', event_dict)
+        elif hasattr(event, 'data'):
             return event.data
         elif isinstance(event, dict):
-            return event
+            return event.get('data', event)
         else:
             return {"raw_event": str(event)}
     
@@ -152,8 +160,26 @@ class HeaderFormatter:
         # Quick format for direct calls (not through event system)
         start_time = time.perf_counter()
         
-        # Use terminal adapter by default
-        result = await self._adapters['terminal'].render(data)
+        # Apply base header if set
+        output_parts = []
+        if self._base_header:
+            output_parts.append(self._base_header.strip())
+        
+        # Apply protocol header if set
+        if self._protocol_header:
+            output_parts.append(self._protocol_header.strip())
+        
+        # Use terminal adapter for dynamic content
+        dynamic_content = await self._adapters['terminal'].render(data)
+        
+        # Apply dynamic header if set
+        if self._dynamic_header:
+            output_parts.append(self._dynamic_header.strip())
+        
+        if dynamic_content:
+            output_parts.append(dynamic_content)
+        
+        result = '\n'.join(output_parts) if output_parts else dynamic_content
         
         # Verify performance
         elapsed = time.perf_counter() - start_time

@@ -4,8 +4,9 @@ Ensures all events conform to expected structure for reliability.
 """
 
 import time
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, Optional
 
 from jsonschema import ValidationError, validate
 
@@ -20,6 +21,45 @@ class EventType(Enum):
     RESOURCE_UPDATE = "resource_update"
     STATUS_UPDATE = "status_update"
     SYSTEM_STATUS = "system_status"
+
+
+@dataclass
+class StatusUpdateEvent:
+    """
+    Event class for status updates in the monitoring system.
+    Used by tests and EventBus for type-safe event handling.
+    """
+    event_type: str
+    timestamp: float
+    data: Dict[str, Any]
+    source: str = "unknown"
+    priority: int = 5
+    correlation_id: Optional[str] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary format for EventBus."""
+        result = {
+            "type": self.event_type,
+            "source": self.source,
+            "timestamp": self.timestamp,
+            "data": self.data,
+            "priority": self.priority
+        }
+        if self.correlation_id:
+            result["correlation_id"] = self.correlation_id
+        return result
+    
+    @classmethod
+    def from_dict(cls, event_dict: Dict[str, Any]) -> 'StatusUpdateEvent':
+        """Create from dictionary format."""
+        return cls(
+            event_type=event_dict.get("type", "status_update"),
+            source=event_dict.get("source", "unknown"),
+            timestamp=event_dict.get("timestamp", time.time()),
+            data=event_dict.get("data", {}),
+            priority=event_dict.get("priority", 5),
+            correlation_id=event_dict.get("correlation_id")
+        )
 
 
 # JSON Schema definitions for each event type
