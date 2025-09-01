@@ -123,6 +123,7 @@ secrets/
 .bmad-core/
 .bmad-creator-tools/
 .bmad-infrastructure-devops/
+backup-bmad/
 .data/
 docs-backup/
 dev-backup.md
@@ -137,6 +138,7 @@ ads.md
 .venv
 .coverage
 .python-version
+
 
 # Testing
 test-results/
